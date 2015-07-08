@@ -1,2 +1,2 @@
-### Meteor 是一个
+### Meteor 是一个建立现代网站的超简单的环境。以前即使利用最好的工具也要几个星期，但是现在利用meteor，几个小时就可以了。
 Meteor is an ultra-simple environment for building modern websites. What once took weeks, even with the best tools, now takes hours with Meteor.
