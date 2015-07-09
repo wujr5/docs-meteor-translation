@@ -38,6 +38,3 @@ meteor deploy myapp.meteor.com
 
 
 
-
-
-
