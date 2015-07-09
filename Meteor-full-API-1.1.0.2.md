@@ -40,13 +40,11 @@ meteor deploy myapp.meteor.com
 - 传送的是数据。Meteor不会通过网络传送HTML。服务器传送的是数据并且让客户端渲染它。
 - 一种语言。Meteor让你使用JavaScript来写客户端和服务器的代码。
 - 无处不在的数据库。无论是客户端还是服务器，你都可以使用相同的方法来访问数据库。
-
-Latency Compensation. On the client, Meteor prefetches data and simulates models to make it look
-￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼￼
-like server method calls return instantly.
-Full Stack Reactivity. In Meteor, realtime is the default. All layers, from database to template, update themselves automatically when necessary.
-Embrace the Ecosystem. Meteor is open source and integrates with existing open source tools and frameworks.
-Simplicity Equals Productivity. The best way to make something seem simple is to have it actually be simple. Meteor's main functionality has clean, classically beautiful APIs.
+- 延迟补偿。在客户端，Meteor预取数据并且模仿模型使得它表现得像时服务器的方法调用得到即时的返回一样。
+- 全栈响应。在Meteor，实时时默认的。所有的层次，从数据库到模版，都会在需要的时候更新自身。
+- 完整的生态系统。Meteor时开源的并且可以集成存在的开源工具和框架。
+- 简单就是生产力。使得事物看起来简单的最好方法是让它真正地简单。
+- Meteor的主要的函数有着干净，典型漂亮的API接口。
 
 
 
