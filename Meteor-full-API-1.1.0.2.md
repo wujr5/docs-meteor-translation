@@ -6,19 +6,6 @@ web的工作方式跟20世纪70年代最初的设计是一样的。应用程序�
 
 传统的方式用艰难的方法来建立这样的应用。Meteor使得它容易了一个数量级，并且还有很多的趣味。你可以在一个周末之内，或者在一个极其吸引人的黑客马拉松中，建立一个完整的应用。你不在需要停工服务器资源，或者在云平台上部署API接口，或者维护一个数据库，或者争论一个ORM层，或者在JavaScript和Ruby之间切换来切换去，或者把数据无效广播到客户端。
 
-
-Quick start!
-Meteor supports OS X, Windows, and Linux.
-On Windows? Download the official Meteor installer here.
-On OS X or Linux? Install the latest official Meteor release from your terminal:
-curl https://install.meteor.com/ | sh
-The Windows installer supports Windows 7, Windows 8.1, Windows Server 2008, and Windows Server 2012. The command line installer supports Mac OS X 10.7 (Lion) and above, and Linux on x86 and x86_64 architectures.
-Once you've installed Meteor, create a project:
-meteor create myapp
-Run it locally:
-cd myapp
-meteor
-
 # 快速开始
 Meteor支持[OS X，Windows，和Linux](https://github.com/meteor/meteor/wiki/Supported-Platforms)
 
@@ -40,8 +27,13 @@ meteor create myapp
 ```
 cd myapp
 meteor
+#Meteor服务运行在：http://localhost:3000/
 ```
 
+向全世界发布：
+```
+meteor deploy myapp.meteor.com
+```
 
 
 
