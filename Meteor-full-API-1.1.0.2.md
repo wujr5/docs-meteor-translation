@@ -46,6 +46,8 @@ meteor deploy myapp.meteor.com
 - 简单就是生产力。使得事物看起来简单的最好方法是让它真正地简单。
 - Meteor的主要的函数有着干净，典型漂亮的API接口。
 
+# 开发者资源
+
 
 
 
