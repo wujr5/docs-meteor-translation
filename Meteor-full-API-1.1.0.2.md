@@ -50,11 +50,6 @@ meteor deploy myapp.meteor.com
 
 如果Meteor有什么吸引了你的兴趣的话，我们希望你能参与到这个project中来。
 
-TUTORIAL
-Get started fast with the official Meteor tutorial!
-STACK OVERFLOW
-The best place to ask (and answer!) technical questions is on Stack Overflow. Be sure to add the meteortag to your question.
-
 ####教程
 
 利用[Meteor官方教程](https://www.meteor.com/install)快速开始吧！
@@ -63,10 +58,14 @@ The best place to ask (and answer!) technical questions is on Stack Overflow. Be
 
 提问（并且回答）技术问题的最好的地方是[STACK OVERFLOW](http://stackoverflow.com/questions/tagged/meteor)。提问Meteor相关问题的时候要确保加上‘Meteor’的标签。
 
-FORUMS
-Visit the Meteor discussion forumsto announce projects, get help, talk about the community, or discuss changes to core.
-GITHUB
-The core code is on GitHub. If you're able to write code or file issues, we'd love to have your help. Please read Contributing to Meteor for how to get started.
+####论坛
+
+访问[Meteor discussion forums](https://forums.meteor.com/)来宣布你发布了项目，寻求帮助，谈论社区，或者讨论核心的变化。
+
+####GITHUB
+
+Meteor的核心代码在[GitHub](https://github.com/meteor/meteor)上。如果你有能力写代码或者文件的问题我们很愿意得到你的帮助。为了上手，请先阅读[Contributing to Meteor](https://github.com/meteor/meteor/wiki/Contributing-to-Meteor)
+
 THE METEOR MANUAL
 In-depth articles about the core components of Meteor can be found on the Meteor Manual. The first article is about Tracker, our transparent reactivity framework. More articles (covering topics like Blaze, Unibuild, and DDP) are coming soon!
 
