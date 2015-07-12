@@ -48,6 +48,29 @@ meteor deploy myapp.meteor.com
 
 # 开发者资源
 
+如果Meteor有什么吸引了你的兴趣的话，我们希望你能参与到这个project中来。
+
+TUTORIAL
+Get started fast with the official Meteor tutorial!
+STACK OVERFLOW
+The best place to ask (and answer!) technical questions is on Stack Overflow. Be sure to add the meteortag to your question.
+
+####教程
+
+利用[Meteor官方教程](https://www.meteor.com/install)快速开始吧！
+
+####STACK OVERFLOW
+
+提问（并且回答）技术问题的最好的地方是[STACK OVERFLOW](http://stackoverflow.com/questions/tagged/meteor)。提问Meteor相关问题的时候要确保加上‘Meteor’的标签。
+
+FORUMS
+Visit the Meteor discussion forumsto announce projects, get help, talk about the community, or discuss changes to core.
+GITHUB
+The core code is on GitHub. If you're able to write code or file issues, we'd love to have your help. Please read Contributing to Meteor for how to get started.
+THE METEOR MANUAL
+In-depth articles about the core components of Meteor can be found on the Meteor Manual. The first article is about Tracker, our transparent reactivity framework. More articles (covering topics like Blaze, Unibuild, and DDP) are coming soon!
+
+
 
 
 
