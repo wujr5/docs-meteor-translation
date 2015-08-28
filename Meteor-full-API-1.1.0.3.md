@@ -165,3 +165,7 @@ public/favicon.ico        # 应用图标
 settings.json             # 传给命令meteor --settings的配置数据
 mobile-config.js          # 为Android/iOS定义icons和元数据
 ```
+
+你也可以在示例应用之外建立你的目录结构。执行`meteor create --example todos`，探索一下它的文件目录，看看真实应用所有的文件都到哪去了。
+
+
