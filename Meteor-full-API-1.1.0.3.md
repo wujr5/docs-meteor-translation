@@ -103,10 +103,38 @@ Meteor就是以下两点：
 
 * **client**  
 
-  名为client的任何目录都不会加载到服务端。类似于把你的代码放到`if (Meteor.isClient){ ... }`中去。处于生产模式时，加载到客户端的所有文件都会被自动合并和压缩。当处于开发模式时，JavaScript和CSS文件不会被压缩，这使得调试更容易。（为保证生产和开发时的一致性，CSS文件仍然会被合并到一个单独的文件中去，因为改变CSS文件的URL会影响它如何处理这些URL）
+  名为client的任何目录都不会加载到服务端。类似于把你的代码放到`if (Meteor.isClient) { ... }`中去。处于生产模式时，加载到客户端的所有文件都会被自动合并和压缩。当处于开发模式时，JavaScript和CSS文件不会被压缩，这使得调试更容易。（为保证生产和开发时的一致性，CSS文件仍然会被合并到一个单独的文件中去，因为改变CSS文件的URL会影响它如何处理这些URL）
   
-  Meteor应用中的HTML文件处理方式与服务端框架对其的处理方式有很大的差异。Meteor扫描你的目录中的所有的HTML文件，找到三个最高级别的元素：`<head>, <body>, <template>` 。`<head>`和`<body>`部分分别被合并到一个单独的`head`和`body`中，当初始页面加载时被发送到客户端。  
+  Meteor应用中的HTML文件处理方式与服务端框架对其的处理方式有很大的差异。Meteor扫描你的目录中的所有的HTML文件，找到三个最高级别的元素：`<head>, <body>, <template>` 。`<head>`和`<body>`部分分别被合并到一个单独的`head`和`body`中，当初始页面加载时被发送到客户端。
   
+* **server**  
   
+  名为server的任何目录都不会加载到客户端。类似于把你的代码放到`if (Meteor.isServer) { ... }`中去，客户端从不会接收到代码。任何敏感的，你不想放到客户端的代码，比如包含密码和授权机制的代码，应该放到server目录中。
+  
+  Meteor会收集，除了在client、public和private子目录中的，所有的JavaScript文件，并且把他们加载到一个Node.js服务器实例中。Meteor的服务端对每一个请求都是用单线程处理的，而不是用Node的异步回调的处理方式。在Meteor应用中，线性执行更适合典型的服务端代码。
+
+* **public**  
+  
+  主目录下的public文件夹中的所有文件是客户端的静态资源。当引用这些资源的时候，URL中不要包含 `public/`，把URL当成是处于主目录下面一样来写。比如，在`<img src='/bg.png'>`中引用`public/bg.png`。这是存放`favicon.ico, robots.tex`和类似文件的最佳位置。
+  
+
+  
+* **private**  
+  
+  主目录下的private文件夹中的所有文件，只能被server端的代码使用，也可以通过[Assests] API来加载。这里可以存放私有数据或者项目中不想被外界访问的文件。
+  
+[Assests]: http://docs.meteor.com/#assets 'assests'
+
+* **client/compatibility**  
+  
+  这个文件夹用来存放兼容的，依赖var声明的全局变量的JavaScript类库。在这个目录下的文件执行的时候无需包裹在一个新的变量空间。这些文件在客户端的JavasScript文件之前执行。
+  
+* **tests**  
+  
+  客户端和服务端任何命名为tests的目录。可以使用这个目录来存放本地测试代码。
+  
+### 特殊目录以外的文件  
+
+
 
 
