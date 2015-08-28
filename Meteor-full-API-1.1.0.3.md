@@ -73,12 +73,6 @@ Meteor的核心代码在[GitHub](https://github.com/meteor/meteor)上。如果�
 
 我们已经亲手写过单页面的Javascript应用了。用一种语言和一种数据格式写整个应用真的很有趣。Meteor就是用来让我们写这样的应用的。
 
-What is Meteor?
-
-Meteor is two things:
-
-A library of packages: pre-written, self-contained modules that you might need in your app.
-
 ## Meteor是什么？
 
 Meteor就是以下两点：
@@ -111,9 +105,8 @@ Meteor就是以下两点：
 
   名为client的任何目录都不会加载到服务端。类似于把你的代码放到`if (Meteor.isClient){ ... }`中去。处于生产模式时，加载到客户端的所有文件都会被自动合并和压缩。当处于开发模式时，JavaScript和CSS文件不会被压缩，这使得调试更容易。（为保证生产和开发时的一致性，CSS文件仍然会被合并到一个单独的文件中去，因为改变CSS文件的URL会影响它如何处理这些URL）
   
-  HTML文件
+  Meteor应用中的HTML文件处理方式与服务端框架对其的处理方式有很大的差异。Meteor扫描你的目录中的所有的HTML文件，找到三个最高级别的元素：`<head>, <body>, <template>` 。`<head>`和`<body>`部分分别被合并到一个单独的`head`和`body`中，当初始页面加载时被发送到客户端。  
   
-
-   HTML files in a Meteor application are treated quite a bit differently from a server-side framework. Meteor scans all the HTML files in your directory for three top-level elements: <head>, <body>, and <template>. The head and body sections are separately concatenated into a single head and body, which are transmitted to the client on initial page load.  
+  
 
 
