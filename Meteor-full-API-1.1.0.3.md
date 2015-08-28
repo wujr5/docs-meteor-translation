@@ -135,6 +135,33 @@ Meteor就是以下两点：
   
 ### 特殊目录以外的文件  
 
+在特殊目录以外的JavaScript文件会同时加载到客户端和服务端。这些地方可以定义model和其他函数。Meteor提供变量 `Meteor.isClient`和`Meteor.isServer`，所以你的代码可以依赖于在客户端还是服务端运行来改变行为。
 
+特殊目录外的CSS和HTML文件只会被加载到客户端，在客户端不会被使用。
 
+### 文件结构例子
 
+你的Meteor应用的文件结构其实是很灵活的。这是一个运用上面提到的特殊目录的示例。
+
+```
+lib/                      # 存放比如collections和utilities这样的公共代码
+lib/methods.js            # Meteor.methods.js定义
+lib/constants.js          # 代码使用的常量
+
+client/compatibility      # 全局的JavaScript类库
+client/lib/               # 客户端首先加载的代码
+client/lib/helpers.js     # 客户代码有用的helpers
+client/body.html          # <body>标签内的内容
+client/head.html          # <head>标签内的内容：<meta>标签等
+client/style.css          # 一些CSS代码
+client/<feature>.html     # 某个功能的HTML模板
+client/<feature>.js       # 某个功能的JavaScript代码
+
+server/lib/permissions.js # 服务端使用的敏感的权限代码
+server/publications.js    # Meteor.publish定义
+
+public/favicon.ico        # 应用图标
+
+settings.json             # 传给命令meteor --settings的配置数据
+mobile-config.js          # 为Android/iOS定义icons和元数据
+```
