@@ -101,9 +101,7 @@ Meteor就是以下两点：
 
 ## 构建你的应用程序
 
-A Meteor application is a mix of client-side JavaScript that runs inside a web browser or PhoneGap mobile app, server-side JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML templates, CSS rules, and static assets. Meteor automates the packaging and transmission of these different components, and it is quite flexible about how you choose to structure those components in your file tree.
-
-一个Meteor应用程序就是
+一个Meteor应用程序就是运行在web浏览器或者PhoneGap移动应用中的客户端JavaScript、运行在Meteor server中的Node.js的服务器端的JavaScript、还有所有支持的HTML模板、CSS规则、静态自愿。Meteor自动化地打包和转换不同的组件，让你灵活地在你的文件中选择如何构建这些组件。
 
 
 
