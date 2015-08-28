@@ -69,6 +69,42 @@ Meteor的核心代码在[GitHub](https://github.com/meteor/meteor)上。如果�
 #### Meteor使用手册
 深入介绍Meteor核心组件的文章可以在[Meteor使用手册](http://manual.meteor.com/)上找到。第一篇文章是关于[Tracker](http://manual.meteor.com/#tracker)的，我们的显而易见的响应式框架。更多的文章（囊括比如Blaze，Unibuild，DDP主题的）很快就会写出来。
 
+# 重要概念
+
+我们已经亲手写过单页面的Javascript应用了。用一种语言和一种数据格式写整个应用真的很有趣。Meteor就是用来让我们写这样的应用的。
+
+What is Meteor?
+
+Meteor is two things:
+
+A library of packages: pre-written, self-contained modules that you might need in your app.
+
+## Meteor是什么？
+
+Meteor就是以下两点：
+
+*  一个*packages的库*：你的应用需要的，预先写好的，独立的模块。  
+   
+   绝大部分应用会使用大概十几个Meteor的核心packages。举两个例子：[webapp][]，管理即将到来的HTTP链接，还有，templating，有数据改变的话会自动更新template。也有一些可选的packages，比如email，能让你的应用发送邮件，或者Meteor Accounts系列（accounts-password, accounts-facebook, accounts-ui等）能提供功能完整地用户账户管理系统，这些你都可以加到你的应用中去。除了这些“核心”packages，在[Atmosphere][]，你能找到你需要的packages，在那有成千上万的产生于Meteor社区的packages。
+
+[webapp]: http://docs.meteor.com/#webapp 'webapp'
+[Atmosphere]: https://atmospherejs.com/ 'Atmosphere'
+
+*  一个叫做`meteor`的命令行工具  
+   
+   `meteor`是一种搭建工具，类似于`make`，`rake`，或者Visual Studio的非视觉部分。`meteor`能集中你的应用里面的所有源代码和资源，执行一些需要的构建步骤（比如编译[CoffeeScript][]，压缩CSS，建立[npm][]模块，或者生成source map），取得你的应用需要用到的packages，最后输出一个独立的，准备运行的应用程序包。在开发模式中它可以交互地完成这些工作，因此每当你改变一个文件的时候，你可以马上看到浏览器的变化。这是超级容易使用的，但是它同时也是可拓展的：你可以添加新语言支持，并且通过添加搭建插件packages来编译。
+   
+   Meteor package系统的关键之处是：*所有package都应该在浏览器端和服务器端独立的工作*（当然指的是能发挥作用的地方，毕竟浏览器没有邮件发送功能，服务器也不能捕获鼠标事件）。我们已经搭建整个生态系统来支持这个关键之处。
+   
+[CoffeeScript]: http://coffeescript.org/ 'CoffeeScript'
+[npm]: https://npmjs.org/ 'npm'
+
+## 构建你的应用程序
+
+A Meteor application is a mix of client-side JavaScript that runs inside a web browser or PhoneGap mobile app, server-side JavaScript that runs on the Meteor server inside a Node.js container, and all the supporting HTML templates, CSS rules, and static assets. Meteor automates the packaging and transmission of these different components, and it is quite flexible about how you choose to structure those components in your file tree.
+
+一个Meteor应用程序就是
+
 
 
 
