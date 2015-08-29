@@ -168,4 +168,20 @@ mobile-config.js          # 为Android/iOS定义icons和元数据
 
 你也可以在示例应用之外建立你的目录结构。执行`meteor create --example todos`，探索一下它的文件目录，看看真实应用所有的文件都到哪去了。
 
+File Load Order
+### 文件加载顺序
+
+最好让你的应用与文件的加载顺序无关，比如可以使用`Meteor.starup`，或者
+
+
+It is best to write your application in such a way that it is insensitive to the order in which files are loaded, for example by using Meteor.startup, or by moving load order sensitive code into packages, which can explicitly control both the load order of their contents and their load order with respect to other packages. However, sometimes load order dependencies in your application are unavoidable.
+
+There are several load ordering rules. They are applied sequentially to all applicable files in the application, in the priority given below:
+1.HTML template files are always loaded before everything else
+2.Files beginning with main. are loaded last
+3.Files inside any lib/ directory are loaded next
+4.Files with deeper paths are loaded next
+5.Files are then loaded in alphabetical order of the entire path
+
+
 
