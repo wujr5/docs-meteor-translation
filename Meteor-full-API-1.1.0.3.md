@@ -168,20 +168,34 @@ mobile-config.js          # 为Android/iOS定义icons和元数据
 
 你也可以在示例应用之外建立你的目录结构。执行`meteor create --example todos`，探索一下它的文件目录，看看真实应用所有的文件都到哪去了。
 
-File Load Order
 ### 文件加载顺序
 
-最好让你的应用与文件的加载顺序无关，比如可以使用`Meteor.starup`，或者
+最好让你的应用与文件的加载顺序无关，比如可以使用`Meteor.starup`，或者把与加载顺序密切相关的代码放到packages里面，这样可以显式控制控制加载顺序和它们的内容和它们相对于其他packages的加载顺序。可是有时候你的应用的加载顺序依赖是难以确定的。
 
+有几种加载顺序规则。规则逐一应用于应用中的所有文件，优先级如下：
 
-It is best to write your application in such a way that it is insensitive to the order in which files are loaded, for example by using Meteor.startup, or by moving load order sensitive code into packages, which can explicitly control both the load order of their contents and their load order with respect to other packages. However, sometimes load order dependencies in your application are unavoidable.
+1. HTML模板文件总是在其他文件之前加载
+2. 然后加载命名以`main`开头的文件
+3. 再加载在lib目录下的文件
+4. 接着处于更深路径的文件加载
+5. 最后文件以完整路径的字母顺序加载
 
-There are several load ordering rules. They are applied sequentially to all applicable files in the application, in the priority given below:
-1.HTML template files are always loaded before everything else
-2.Files beginning with main. are loaded last
-3.Files inside any lib/ directory are loaded next
-4.Files with deeper paths are loaded next
-5.Files are then loaded in alphabetical order of the entire path
+```
+nav.html
+main.html
+client/lib/methods.js
+client/lib/styles.js
+lib/feature/styles.js
+lib/collections.js
+client/feature-y.js
+feature-x.js
+client/main.js
+```
+
+举个例子，以上的文件是以正确地加载顺序编排的。`main.html`排在第二加载是因为HTML模板总是首先加载，即使以`main.`开头，因为规则1优先级大于规则2.可是，它会在`nav.html`加载之后加载因为规则2优先级高于规则5。
+
+`client/lib/styles.js`和`lib/feature/styles.js`由于规则4而有相同的加载顺序，可是，因为`client`在字母顺序上先于`lib`，它会先加载。
+
 
 
 
