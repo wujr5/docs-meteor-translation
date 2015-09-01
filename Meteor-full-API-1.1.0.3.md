@@ -19,11 +19,13 @@ curl https://install.meteor.com/ | sh
 Windows安装器支持Windows 7，Windows 8.1，Windows Server 2008，还有Windows Server 2012。命令行安装起支持Mac OS X 10.7 （Lion）和以上的版本，还有Linux在X86和X86_64架构上的Linux。
 
 一旦你安装了Meteor，可以用以下命令创建应用工程：
+
 ```
 meteor create myapp
 ```
 
 本地运行：
+
 ```
 cd myapp
 meteor
@@ -31,6 +33,7 @@ meteor
 ```
 
 向全世界发布：
+
 ```
 meteor deploy myapp.meteor.com
 ```
@@ -241,8 +244,9 @@ packages/oranges/<anything>.js # 文件加载受packege.js控制
 
 ```
 
-## Data and security
-Meteor makes writing distributed client code as simple as talking to a local database. It's a clean, simple, and secure approach that removes the need to implement individual RPC endpoints, manually cache data on the client to avoid slow roundtrips to the server, and carefully orchestrate invalidation messages to every client as data changes.
+## 数据和安全
+
+Meteor使得编写分布式客户端代码就像在谈论本地数据库一样简单。它是一个干净简单和安全的方法，能够免去单独实现RPC（Remote Procedure Call）端的需求，在客户端手动缓存数据来避免慢速往返于服务器与客户端之间，并且当数据发变化时，能给每个客户端，小心地编排分发独立的消息。
 
 In Meteor, the client and server share the same database API. The same exact application code — like validators and computed properties — can often run in both places. But while code running on the server has direct access to the database, code running on the client does not. This distinction is the basis for Meteor's data security model.
 
