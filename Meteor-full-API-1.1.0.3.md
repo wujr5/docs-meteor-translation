@@ -250,11 +250,9 @@ Meteor使得编写分布式客户端代码就像在谈论本地数据库一样�
 
 在Meteor中，客户端和服务端使用相同的数据库API。相同的应用代码 - 就像验证器和计算属性 - 可以经常在同时运行在两个端。但是当服务端的代码能直接访问数据库，而客户端的代码不能。这种特征就是Meteor数据安全模型的基础。
 
-By default, a new Meteor app includes the autopublish and insecure packages, which together mimic the effect of each client having full read/write access to the server's database. These are useful prototyping tools, but typically not appropriate for production applications. When you're ready, just remove the packages.
+> 默认情况下，一个新的Meteor应用会包括packages`autopublish`和`insecure`，这能使得客户端能读写客户端数据库。这些是用用的构建原型的工具，但对于产品应用来说是不合适的。你准备好的话，删掉这两个包吧。
 
-
-
-Every Meteor client includes an in-memory database cache. To manage the client cache, the server publishes sets of JSON documents, and the client subscribes to those sets. As documents in a set change, the server patches each client's cache.
+每一个Meteor客户端包含一个内存中的数据库缓存。为了管理客户端缓存，服务器`publish`JSON文档集合，并且客户端需要`subscribes`这些集合。如果集合中的文档发生改变，服务端相应地改变每一个客户端的缓存。
 
 Today most Meteor apps use MongoDB as their database because it is the best supported, though support for other databases is coming in the future. The Mongo.Collection class is used to declare Mongo collections and to manipulate them. Thanks to minimongo, Meteor's client-side Mongo emulator, Mongo.Collection can be used from both client and server code.
 
