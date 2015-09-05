@@ -248,9 +248,11 @@ packages/oranges/<anything>.js # 文件加载受packege.js控制
 
 Meteor使得编写分布式客户端代码就像在谈论本地数据库一样简单。它是一个干净简单和安全的方法，能够免去单独实现RPC（Remote Procedure Call）端的需求，在客户端手动缓存数据来避免慢速往返于服务器与客户端之间，并且当数据发变化时，能给每个客户端，小心地编排分发独立的消息。
 
-In Meteor, the client and server share the same database API. The same exact application code — like validators and computed properties — can often run in both places. But while code running on the server has direct access to the database, code running on the client does not. This distinction is the basis for Meteor's data security model.
+在Meteor中，客户端和服务端使用相同的数据库API。相同的应用代码 - 就像验证器和计算属性 - 可以经常在同时运行在两个端。但是当服务端的代码能直接访问数据库，而客户端的代码不能。这种特征就是Meteor数据安全模型的基础。
 
 By default, a new Meteor app includes the autopublish and insecure packages, which together mimic the effect of each client having full read/write access to the server's database. These are useful prototyping tools, but typically not appropriate for production applications. When you're ready, just remove the packages.
+
+
 
 Every Meteor client includes an in-memory database cache. To manage the client cache, the server publishes sets of JSON documents, and the client subscribes to those sets. As documents in a set change, the server patches each client's cache.
 
