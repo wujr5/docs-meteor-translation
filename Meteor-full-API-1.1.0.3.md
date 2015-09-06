@@ -549,18 +549,21 @@ Meteor使用一个简单装卸包装系统，意味着它只会加载每一个pa
 
 ## 命名空间
 
-Meteor's namespacing support makes it easy to write large applications in JavaScript. Each package that you use in your app exists in its own separate namespace, meaning that it sees only its own global variables and any variables provided by the packages that it specifically uses. Here's how it works.
+Meteor的命名空间支持使得它很容易用JavaScript写大规模的应用。你在你的应用中使用的每一个package都存在于它自己的分开的命名空间中，意味着它只能看到它自己的全局变量，和它特定使用的packages提供的任何变量。以下是工作原理。
 
-When you declare a top-level variable, you have a choice. You can make the variable File Scope or Package Scope.
+当你声明一个最外层变量的时候，你有一个选择。你可以使得这个变量在文件作用域内或者Package作用域内。
 
-// File Scope. This variable will be visible only inside this
-// one file. Other files in this app or package won't see it.
+```
+// 文件作用域。这个变量在这个文件范围内是可视的。
+// 这个应用的其他文件或package看不到它。
 var alicePerson = {name: "alice"};
 
-// Package Scope. This variable is visible to every file inside
-// of this package or app. The difference is that 'var' is
-// omitted.
+// Package作用域。
+// 对于这个package或者应用的所有文件来说，这个变量是可视的
+// 不同之处是省略了‘var‘声明
 bobPerson = {name: "bob"};
+```
+
 Notice that this is just the normal JavaScript syntax for declaring a variable that is local or global. Meteor scans your source code for global variable assignments and generates a wrapper that makes sure that your globals don't escape their appropriate namespace.
 
 In addition to File Scope and Package Scope, there are also Exports. An export is a variable that a package makes available to you when you use it. For example, the email package exports the Email variable. If your app uses the email package (and only if it uses the email package!) then your app can see Email and you can call Email.send. Most packages have only one export, but some packages might have two or three (for example, a package that provides several classes that work together).
@@ -577,6 +580,7 @@ If a package foo is included in your app, regardless of whether your app uses it
 
 When declaring functions, keep in mind that function x () {} is just shorthand for var x = function x () {} in JavaScript. Consider these examples:
 
+```
 // This is the same as 'var x = function x () ...'. So x() is
 // file-scope and can be called only from within this one file.
 function x () { ... }
@@ -584,7 +588,9 @@ function x () { ... }
 // No 'var', so x() is package-scope and can be called from
 // any file inside this app or package.
 x = function () { ... }
-Technically speaking, globals in an app (as opposed to in a package) are actually true globals. They can't be captured in a scope that is private to the app code, because that would mean that they wouldn't be visible in the console during debugging! This means that app globals actually end up being visible in packages. That should never be a problem for properly written package code (since the app globals will still be properly shadowed by declarations in the packages). You certainly shouldn't depend on this quirk, and in the future Meteor may check for it and throw an error if you do.
+```
+
+> Technically speaking, globals in an app (as opposed to in a package) are actually true globals. They can't be captured in a scope that is private to the app code, because that would mean that they wouldn't be visible in the console during debugging! This means that app globals actually end up being visible in packages. That should never be a problem for properly written package code (since the app globals will still be properly shadowed by declarations in the packages). You certainly shouldn't depend on this quirk, and in the future Meteor may check for it and throw an error if you do.
 
 ## 部署
 
