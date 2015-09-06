@@ -345,39 +345,47 @@ Meteor提供了一个轻量级的库来检查你所期望的参数和其他值�
 
 Meteor也提供一个容易的途径来确保所有你的method和publish函数验证它们所有的参数。只需要执行`meteor add audit-argument-checks`，任何method或者publish函数跳过检查所有它的参数的话，都会失败，并产生一个异常。
 
-## Reactivity
+## 响应式
 
-Meteor embraces the concept of reactive programming. This means that you can write your code in a simple imperative style, and the result will be automatically recalculated whenever data changes that your code depends on.
+Meteor拥抱[响应式编程][]的概念。这意味着你可以用简单命令式风格来写你的代码，每当你的代码依赖的数据数据发生变化的时候，结果都会自动地被重新计算。
 
+[响应式编程]: http://en.wikipedia.org/wiki/Reactive_programming
+
+```
 Tracker.autorun(function () {
   Meteor.subscribe("messages", Session.get("currentRoomId"));
 });
-This example (taken from a chat room client) sets up a data subscription based on the session variable currentRoomId. If the value of Session.get("currentRoomId") changes for any reason, the function will be automatically re-run, setting up a new subscription that replaces the old one.
+```
 
-This automatic recomputation is achieved by a cooperation between Session and Tracker.autorun.  Tracker.autorun performs an arbitrary "reactive computation" inside of which data dependencies are tracked, and it will re-run its function argument as necessary. Data providers like Session, on the other hand, make note of the computation they are called from and what data was requested, and they are prepared to send an invalidation signal to the computation when the data changes.
+这个例子（从一个聊天室应用客户端引用来的）设置了一个基于session变量`currentRoomId`的数据订阅。如果`Session.get("currentRoomId")`的值因为某些原因发生了改变，这个函数会自动重新执行，设置一个新的订阅来代替旧的。
 
-This simple pattern (reactive computation + reactive data source) has wide applicability. Above, the programmer is saved from writing unsubscribe/resubscribe calls and making sure they are called at the right time. In general, Meteor can eliminate whole classes of data propagation code which would otherwise clog up your application with error-prone logic.
+这个自动的重新执行是通过`Session`和`Tracker.autorun`的合作来实现的。`Tracker.autorun`表现为一个任意的“响应式计算”，在它的内部，数据依赖是被追踪的，并且当有需要的时候，它会重新运行它的函数参数。数据提供者比如`Session`，在另一方面，记录这些它们被引用的computation和什么数据被请求，同时当数据发生改变的时候，它们会准备发送一个失效信号给这个computation。
 
-These Meteor functions run your code as a reactive computation:
+这个简单地模式（响应式computation + 响应式数据源）有着广泛地应用。以上，程序员幸免于写`ubsubscribe/resubscribe`调用和确保它们在正确地时间被调用。通常来说，Meteor可以消除整个类别的数据传输代码，这些代码可能会因为简单地逻辑而阻塞你的应用。
 
-Templates
-Tracker.autorun
-Blaze.render and Blaze.renderWithData
-And the reactive data sources that can trigger changes are:
+这些Meteor函数作为响应式的computation来执行你的代码：
 
-Session variables
-Database queries on Collections
-Meteor.status
-The ready() method on a subscription handle
-Meteor.user
-Meteor.userId
-Meteor.loggingIn
-In addition, the following functions which return an object with a stop method, if called from a reactive computation, are stopped when the computation is rerun or stopped:
+* Templates
+* Tracker.autorun
+* Blaze.render 和 Blaze.renderWithData
 
-Tracker.autorun (nested)
-Meteor.subscribe
-observe() and observeChanges() on cursors
-Meteor's implementation is a package called Tracker that is fairly short and straightforward. You can use it yourself to implement new reactive data sources.
+可以触发改变的响应式数据源：
+
+* Session variables
+* Database queries on Collections
+* Meteor.status
+* The ready() method on a subscription handle
+* Meteor.user
+* Meteor.userId
+* Meteor.loggingIn
+
+此外，下面的函数 - 如果在一个响应式的computation中调用的话，返回一个含有stop方法的对象 - 会被停止当computation被重新执行或者被停止的时候。
+
+* Tracker.autorun (nested)
+* Meteor.subscribe
+* observe() and observeChanges() on cursors
+
+Meteor是由一个相当简短的叫做`Tracker`的package来实现的。你可以使用它来实现心得响应式数据源。
 
 
 
