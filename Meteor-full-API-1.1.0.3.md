@@ -254,48 +254,59 @@ Meteor使得编写分布式客户端代码就像在谈论本地数据库一样�
 
 每一个Meteor客户端包含一个内存中的数据库缓存。为了管理客户端缓存，服务器`publish`JSON文档集合，并且客户端需要`subscribes`这些集合。如果集合中的文档发生改变，服务端相应地改变每一个客户端的缓存。
 
-Today most Meteor apps use MongoDB as their database because it is the best supported, though support for other databases is coming in the future. The Mongo.Collection class is used to declare Mongo collections and to manipulate them. Thanks to minimongo, Meteor's client-side Mongo emulator, Mongo.Collection can be used from both client and server code.
+今天几乎所有的Meteor应用都是用MongoDB作为它们的数据库，因为它得到了最好的支持，将来也会支持其他数据库。`Mongo.Collection`类用来尚明Mongo的collections和操纵它们。多亏了minimongo，Meteor的客户端的Mongo副本，`Mongo.Collection`可以在客户端和服务端代码中使用。
 
-// declare collections
-// this code should be included in both the client and the server
+```
+// 声明collections
+// 代码应该存在于客户端和服务端
 Rooms = new Mongo.Collection("rooms");
 Messages = new Mongo.Collection("messages");
 Parties = new Mongo.Collection("parties");
 
-// server: populate collections with some initial documents
+// 服务端：用初始化的文档填充collections
 Rooms.insert({name: "Conference Room A"});
 var myRooms = Rooms.find({}).fetch();
 Messages.insert({text: "Hello world", room: myRooms[0]._id});
 Parties.insert({name: "Super Bowl Party"});
-Each document set is defined by a publish function on the server. The publish function runs each time a new client subscribes to a document set. The data in a document set can come from anywhere, but the common case is to publish a database query.
+```
 
-// server: publish all room documents
+在server端`publish`函数定义每一个文档集合。每当一个新的客户端订阅一个文档集合的时候，`publish`函数就运行。文档集合的数据可以来自任何地方，但是通常情况下`publish`一个数据库查询。
+
+```
+// 服务端：发布所有room文档
 Meteor.publish("all-rooms", function () {
   return Rooms.find(); // everything
 });
 
-// server: publish all messages for a given room
+// 服务端：对一个给定的room发布所有messages
 Meteor.publish("messages", function (roomId) {
   check(roomId, String);
   return Messages.find({room: roomId});
 });
 
-// server: publish the set of parties the logged-in user can see.
+// 服务端：把parties集合发布给登录的用户
 Meteor.publish("parties", function () {
   return Parties.find({$or: [{"public": true},
                              {invited: this.userId},
                              {owner: this.userId}]});
 });
-Publish functions can provide different results to each client. In the last example, a logged in user can only see Party documents that are public, that the user owns, or that the user has been invited to.
+```
 
-Once subscribed, the client uses its cache as a fast local database, dramatically simplifying client code. Reads never require a costly round trip to the server. And they're limited to the contents of the cache: a query for every document in a collection on a client will only return documents the server is publishing to that client.
+`publish`函数可以给每个客户端提供不同的结果。在上一个例子中，一个登录的用户仅能看到公开的，或者他拥有的，或者他被邀请的Party文档。
 
-// client: start a parties subscription
+一旦订阅开始，客户端使用它的缓存作为一个快速地本地数据库，大大简化了客户端代码。读取数据不再需要访问服务器的代价了。他们同事限制缓存的内容：在客户端，对在collection中的每一个文档的查询，仅仅返回服务端`publish`给客户端的文档。
+
+```
+// 客户端：开始一个parties订阅
 Meteor.subscribe("parties");
 
-// client: return array of Parties this client can read
-return Parties.find().fetch(); // synchronous!
+// 客户端：返回一个客户端可以读取的Parties数组
+return Parties.find().fetch(); // 这是同步的!
+```
+
 Sophisticated clients can turn subscriptions on and off to control how much data is kept in the cache and manage network traffic. When a subscription is turned off, all its documents are removed from the cache unless the same document is also provided by another active subscription.
+
+
 
 When the client changes one or more documents, it sends a message to the server requesting the change. The server checks the proposed change against a set of allow/deny rules you write as JavaScript functions. The server only accepts the change if all the rules pass.
 
