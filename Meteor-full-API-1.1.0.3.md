@@ -529,11 +529,15 @@ Template.playerScore.events({
 
 ## 使用Packages
 
-All of the functionality you've read about so far is implemented in standard Meteor packages. This is possible thanks to Meteor's unusually powerful isomorphic package and build system. Isomorphic means the same packages work in the web browser, in mobile apps, and on the server. Packages can also contain plugins that extend the build process, such as coffeescript (CoffeeScript compilation) or templating (compiling HTML templates).
+到目前为止你所读到得功能都是在标准的Meteor packages实现的。多亏Meteor不同寻常的强大的同构package和构建系统，使得这变得可能。同构意味着相同的packages在web浏览器、手机应用、和服务端起作用，Packages也可以包含拓展构建过程的插件，比如`coffeescript`（[CoffeeScript][]编译）或者`templating`（编译HTML模板）。
 
-Anyone can publish a Meteor package, and thousands of community-written packages have been published to date. The easiest way to browse these packages is Atmosphere, by Percolate Studio. You can also use the meteor search and meteor show commands.
+[CoffeeScript]: http://coffeescript.org/
 
-You can add packages to your project with meteor add and remove them with meteor remove. Additionally, meteor list will tell you what packages your project is using, and meteor update will update them to the newest versions when possible.
+任何人都可以发布一个Meteorpackage，并且成千上万的社区写的package已经被发布了。浏览这些pakcages的最简单的方式是[Atmosphere][]，由Percolate Studio运营。你也可以使`meteor search`和`meteor show`命令。
+
+[Atmosphere]: http://www.atmospherejs.com/
+
+使用`meteor add`，你可以添加packages到你的项目中去，使用`meteor remove`来移除。此外，`meteor list`会告诉你你的项目正在使用什么packages，如果有更新的话，`meteor update`会把项目中的packages更新到最新的版本。
 
 By default all apps include the meteor-platform package. This automatically pulls in the packages that make up the core Meteor stack. If you want to build your own custom stack, just remove meteor-platform from your app and add back in whichever of the standard packages you want to keep.
 
@@ -541,7 +545,9 @@ Meteor uses a single-loading packaging system, meaning that it loads just one ve
 
 In addition to the packages in the official Meteor release being used by your app, meteor list and meteor add also search the packages directory at the top of your app. You can also use the packages directory to break your app into subpackages for your convenience, or to test packages that you might want to publish. See Writing Packages.
 
-Namespacing
+默认地所有应用会包括`meteor-platform`的package。这会自动地
+
+## Namespacing
 
 Meteor's namespacing support makes it easy to write large applications in JavaScript. Each package that you use in your app exists in its own separate namespace, meaning that it sees only its own global variables and any variables provided by the packages that it specifically uses. Here's how it works.
 
@@ -580,7 +586,7 @@ function x () { ... }
 x = function () { ... }
 Technically speaking, globals in an app (as opposed to in a package) are actually true globals. They can't be captured in a scope that is private to the app code, because that would mean that they wouldn't be visible in the console during debugging! This means that app globals actually end up being visible in packages. That should never be a problem for properly written package code (since the app globals will still be properly shadowed by declarations in the packages). You certainly shouldn't depend on this quirk, and in the future Meteor may check for it and throw an error if you do.
 
-Deploying
+## Deploying
 
 Meteor is a full application server. We include everything you need to deploy your application on the internet: you just provide the JavaScript, HTML, and CSS.
 
@@ -611,7 +617,7 @@ cd my_directory
 env PORT=3000 MONGO_URL=mongodb://localhost:27017/myapp node main.js
 Some packages might require other environment variables. For example, the email package requires a MAIL_URL environment variable.
 
-Writing packages
+## Writing packages
 
 Writing Meteor packages is easy. To initialize a meteor package, run meteor create --package username:packagename, where username is your Meteor Developer username. This will create a package from scratch and prefill the directory with a package.js control file and some javascript. By default, Meteor will take the package name from the name of the directory that contains the package.js file. Don't forget to run meteor add [packagename], even if the package is internal to the app, in order to use it.
 
