@@ -304,37 +304,40 @@ Meteor.subscribe("parties");
 return Parties.find().fetch(); // 这是同步的!
 ```
 
-Sophisticated clients can turn subscriptions on and off to control how much data is kept in the cache and manage network traffic. When a subscription is turned off, all its documents are removed from the cache unless the same document is also provided by another active subscription.
+复杂的客户端可以通过关闭或者打开订阅来控制缓存中的存储多少数据和控制网络流量。当一个订阅关闭的时候，所有它的文档会从缓存中移除，除非相同文档同样被其他打开的订阅提供。
 
+当客户端改变一个或者多个文档的时候，它会发送信息给服务端请求发生改变。服务端在你写的就像JavaScript函数一样的`allow/deny`规则，检查这些改变请求。服务端接受改变请求，当且仅当所有规则都通过了。
 
-
-When the client changes one or more documents, it sends a message to the server requesting the change. The server checks the proposed change against a set of allow/deny rules you write as JavaScript functions. The server only accepts the change if all the rules pass.
-
-// server: don't allow client to insert a party
+```
+// 服务端：不允许客户端插入一条party数据
 Parties.allow({
   insert: function (userId, party) {
     return false;
   }
 });
 
-// client: this will fail
+// 客户端：插入失败
 var party = { ... };
 Parties.insert(party);
-If the server accepts the change, it applies the change to the database and automatically propagates the change to other clients subscribed to the affected documents. If not, the update fails, the server's database remains untouched, and no other client sees the update.
+```
 
-Meteor has a cute trick, though. When a client issues a write to the server, it also updates its local cache immediately, without waiting for the server's response. This means the screen will redraw right away. If the server accepted the update — what ought to happen most of the time in a properly behaving client — then the client got a jump on the change and didn't have to wait for the round trip to update its own screen. If the server rejects the change, Meteor patches up the client's cache with the server's result.
+如果服务端接受了改变，它会对数据库和应用这些改变，并且自动把这些改变广播给其他客户端，以调整文档。如果没有接受，更新失败，服务端数据库仍然没被改变，其他客户端也看不到这些改变。
 
-Putting it all together, these techniques accomplish latency compensation. Clients hold a fresh copy of the data they need, and never need to wait for a roundtrip to the server. And when clients modify data, those modifications can run locally without waiting for the confirmation from the server, while still giving the server final say over the requested change.
+可是Meteor有一个可爱的trick。当一个客户端发布对服务端的写入的时候，它也会马上更新本地缓存，而不需要等待服务端响应。这意味着屏幕会马上重绘。如果服务端接受了更新 - 在表现正常的客户端绝大部分情况下会接受 - 那么客户端会跳过变化并且不需要等待返回来更新屏幕。如果服务端拒绝更新，Meteor会把服务端结果分发给客户端缓存。
 
-The current release of Meteor supports MongoDB, the popular document database, and the examples in this section use the MongoDB API. Future releases will include support for other databases.
+把这些技术放到一起，便实现了延迟补偿。客户端保留一个它们需要的最新的数据副本，不需要等待服务端的响应。当客户端修改了数据，这些修改可以在本地执行，不需要当代服务端确认，同时仍然通过请求变化给服务端最终的决定权。
 
-Authentication and user accounts
+> 当前的Meteor版本支持MongoDB，一个流行的文档数据库，在这部分的例子中使用了[MongoDB API][]。未来的版本会给其他数据库提供支持。
 
-Meteor includes Meteor Accounts, a state-of-the-art authentication system. It features secure password login using the bcrypt algorithm, and integration with external services including Facebook, GitHub, Google, Meetup, Twitter, and Weibo. Meteor Accounts defines a Meteor.users collection where developers can store application-specific user data.
+[MongoDB API]: http://www.mongodb.org/display/DOCS/Manual
 
-Meteor also includes pre-built forms for common tasks like login, signup, password change, and password reset emails. You can add Accounts UI to your app with just one line of code. The accounts-ui package even provides a configuration wizard that walks you through the steps to set up the external login services you're using in your app.
+### 授权和用户账户
 
-Input validation
+Meteor包含`Meteor Accounts`，一个最先进的认证系统。它使用bcrypt加密算法来提供安全的密码登陆功能，与外部服务集成，包括Facebook，GitHub，Google，Meetup，Twitter和微博。Meteor Accounts定义了一个`Meteor.users`的集合，开发者可以使用它来存储应用程序特定的用户数据。
+
+Meteor也为普通任务，比如登录、注册、修改密码和重新设置邮箱，包含了预置的形式。只需要一行代码，你就可以给你的应用添加`Accounts UI`。`account-ui`package甚至提供一个配置向导，带领你通过几个不走来设置你在应用中使用的外部登录服务。
+
+### 输入验证
 
 Meteor allows your methods and publish functions to take arguments of any JSON type. (In fact, Meteor's wire protocol supports EJSON, an extension of JSON which also supports other common types like dates and binary buffers.) JavaScript's dynamic typing means you don't need to declare precise types of every variable in your app, but it's usually helpful to ensure that the arguments that clients are passing to your methods and publish functions are of the type that you expect.
 
@@ -342,7 +345,11 @@ Meteor provides a lightweight library for checking that arguments and other valu
 
 Meteor also provides an easy way to make sure that all of your methods and publish functions validate all of their arguments. Just run meteor add audit-argument-checks and any method or publish function which skips checking any of its arguments will fail with an exception.
 
-Reactivity
+Meteor允许你的mothod和`publish`函数带有任何JSON类型的参数。（实际上，Meteor的连接协议hi吃EJSON，一个JSON的拓展，也能支持其他普通类型比如dates和binary buffers）JavaScript的动态类型意味着，你不需要在你的应用中为每一个变量声明精确地类型，但是，确保客户端传给你的method和publish函数的参数，是你希望的类型往往是有用的。
+
+
+
+## Reactivity
 
 Meteor embraces the concept of reactive programming. This means that you can write your code in a simple imperative style, and the result will be automatically recalculated whenever data changes that your code depends on.
 
