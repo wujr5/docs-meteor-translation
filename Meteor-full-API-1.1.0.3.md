@@ -339,15 +339,11 @@ Meteor也为普通任务，比如登录、注册、修改密码和重新设置�
 
 ### 输入验证
 
-Meteor allows your methods and publish functions to take arguments of any JSON type. (In fact, Meteor's wire protocol supports EJSON, an extension of JSON which also supports other common types like dates and binary buffers.) JavaScript's dynamic typing means you don't need to declare precise types of every variable in your app, but it's usually helpful to ensure that the arguments that clients are passing to your methods and publish functions are of the type that you expect.
+Meteor允许你的mothod和`publish`函数带有任何JSON类型的参数。（实际上，Meteor的连接协议hi吃EJSON，一个JSON的拓展，也能支持其他普通类型比如dates和binary buffers）JavaScript的动态类型意味着，你不需要在你的应用中为每一个变量声明精确地类型，但是，确保客户端传给你的method和publish函数的参数，是你希望的类型，往往是有用的。
 
-Meteor provides a lightweight library for checking that arguments and other values are the type you expect them to be. Simply start your functions with statements like check(username, String) or check(office, {building: String, room: Number}). The check call will throw an error if its argument is of an unexpected type.
+Meteor提供了一个轻量级的库来检查你所期望的参数和其他值的类型。只需要在你的函数中写这样的语句：`check(username, String)`或者`check(office, {building: String, room: Number})`。如果它的参数是一个意想不到的类型的话，`check`的调用会抛出一个错误。
 
-Meteor also provides an easy way to make sure that all of your methods and publish functions validate all of their arguments. Just run meteor add audit-argument-checks and any method or publish function which skips checking any of its arguments will fail with an exception.
-
-Meteor允许你的mothod和`publish`函数带有任何JSON类型的参数。（实际上，Meteor的连接协议hi吃EJSON，一个JSON的拓展，也能支持其他普通类型比如dates和binary buffers）JavaScript的动态类型意味着，你不需要在你的应用中为每一个变量声明精确地类型，但是，确保客户端传给你的method和publish函数的参数，是你希望的类型往往是有用的。
-
-
+Meteor也提供一个容易的途径来确保所有你的method和publish函数验证它们所有的参数。只需要执行`meteor add audit-argument-checks`，任何method或者publish函数跳过检查所有它的参数的话，都会失败，并产生一个异常。
 
 ## Reactivity
 
