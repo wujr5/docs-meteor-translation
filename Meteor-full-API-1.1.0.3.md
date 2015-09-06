@@ -539,15 +539,15 @@ Template.playerScore.events({
 
 使用`meteor add`，你可以添加packages到你的项目中去，使用`meteor remove`来移除。此外，`meteor list`会告诉你你的项目正在使用什么packages，如果有更新的话，`meteor update`会把项目中的packages更新到最新的版本。
 
-By default all apps include the meteor-platform package. This automatically pulls in the packages that make up the core Meteor stack. If you want to build your own custom stack, just remove meteor-platform from your app and add back in whichever of the standard packages you want to keep.
+默认地所有应用会包括`meteor-platform`的package。这会自动地把组成核心Meteor栈的包拉进来。如果你想构建你自己自定义的栈，只需要从你的应用中移除`meteor-platform`，同时添加任何你想保留的标准packages。
 
-Meteor uses a single-loading packaging system, meaning that it loads just one version of every package. Before adding or upgrading to a particular version of a package, Meteor uses a constraint solver to check if doing so will cause other packages to break. By default, Meteor will choose conservatively. When adding transitive dependencies (packages that other packages, but not the application itself) depend on, Meteor will try to choose the earlier version.
+Meteor使用一个简单装卸包装系统，意味着它只会加载每一个package的一个版本。在添加或者升级一个特定版本的package之前，Meteor使用一个约束解算器来检查这样做是否会导致其他package损坏。默认地，Meteor会选择保守地选择。当添加传递依赖关系（包是其他的包，但不是应用本身）时，Meteor会尝试选择更早的版本。
 
-In addition to the packages in the official Meteor release being used by your app, meteor list and meteor add also search the packages directory at the top of your app. You can also use the packages directory to break your app into subpackages for your convenience, or to test packages that you might want to publish. See Writing Packages.
+除了在官方Meteor发行版本的包在被你的应用使用之外，`meteor list`和`meteor add`也会在你的应用的顶层目录中搜索`packages`。为了方便，你也可以使用`packages`目录，把你的应用分解成若干个子package，或者用来测试你想发布的packages。详情请看[Writing Packages][]。
 
-默认地所有应用会包括`meteor-platform`的package。这会自动地
+[Writing Packages]: http://docs.meteor.com/#writingpackages
 
-## Namespacing
+## 命名空间
 
 Meteor's namespacing support makes it easy to write large applications in JavaScript. Each package that you use in your app exists in its own separate namespace, meaning that it sees only its own global variables and any variables provided by the packages that it specifically uses. Here's how it works.
 
@@ -586,7 +586,7 @@ function x () { ... }
 x = function () { ... }
 Technically speaking, globals in an app (as opposed to in a package) are actually true globals. They can't be captured in a scope that is private to the app code, because that would mean that they wouldn't be visible in the console during debugging! This means that app globals actually end up being visible in packages. That should never be a problem for properly written package code (since the app globals will still be properly shadowed by declarations in the packages). You certainly shouldn't depend on this quirk, and in the future Meteor may check for it and throw an error if you do.
 
-## Deploying
+## 部署
 
 Meteor is a full application server. We include everything you need to deploy your application on the internet: you just provide the JavaScript, HTML, and CSS.
 
@@ -617,7 +617,7 @@ cd my_directory
 env PORT=3000 MONGO_URL=mongodb://localhost:27017/myapp node main.js
 Some packages might require other environment variables. For example, the email package requires a MAIL_URL environment variable.
 
-## Writing packages
+## 写packages
 
 Writing Meteor packages is easy. To initialize a meteor package, run meteor create --package username:packagename, where username is your Meteor Developer username. This will create a package from scratch and prefill the directory with a package.js control file and some javascript. By default, Meteor will take the package name from the name of the directory that contains the package.js file. Don't forget to run meteor add [packagename], even if the package is internal to the app, in order to use it.
 
