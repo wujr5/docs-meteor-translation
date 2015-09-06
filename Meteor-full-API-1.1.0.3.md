@@ -385,7 +385,250 @@ Tracker.autorun(function () {
 * Meteor.subscribe
 * observe() and observeChanges() on cursors
 
-Meteor是由一个相当简短的叫做`Tracker`的package来实现的。你可以使用它来实现心得响应式数据源。
+Meteor是由一个相当简短的叫做`Tracker`的package来实现的。你可以使用它来实现新的响应式数据源。
 
+## 实时刷新的HTML模板
 
+HTML模板是web应用的核心。有了Blaze，Meteor的实时刷新网页的技术，你可以响应式地渲染你的HTML，意思是它可以自动更新来跟踪生成模板的数据的改变。
 
+Meteor使得使用你喜欢的HTML模板语言，同时有着Meteor的实时网页刷新的技术，变得容易。你只需要正常地写模板，Meteor会让它实时刷新。
+
+Meteor附带一种模板语言，叫做[Spacebars][]，源于[Handlebars][]。它带着Handlebars的一些特性和语法，但是，当编译开始的时候，它被定制来生成响应式的Meteor模板。
+
+[Spacebars]: https://github.com/meteor/meteor/blob/devel/packages/spacebars/README.md
+[Handlebars]: http://handlebarsjs.com/ 
+
+> 今天，Meteor自带的仅有的模板系统是Spacebars，但我们的社区已经为其他的语言创建了packages，比如[Jade][]
+
+[Jade]: https://atmospherejs.com/mquandalle/jade
+
+为了定义模板，在你的项目中创建一个拓展名为`.html`的文件。在文件中，创建一个`<template>`的tag和给它设置一个`name`属性。把模板内容放到这个tag里面。Meteor会预编译这个模板，把它传送到客户端，和使它作为全局的模板对象而可以被访问。
+
+当你的应用加载的时候，它会自动的渲染特定叫做`<body>`的模板，这个模板写在`<body>`元素中而不是`<template>`中。使用`{{> inclusion}}`操作符，你可以把一个模板插入到另一个模板当中。
+
+把数据插入到templates中的最简单的方式是在JavaScript中定义`helper`函数。用`Template.templateName.helpers({ ... })`定义`helpers`。把它们放到一起。
+
+```
+// 在文件myapp.html中
+<body>
+  <h1>Today's weather!</h1>
+  {{> forecast}}
+</body>
+
+<template name="forecast">
+  <div>It'll be {{prediction}} tonight</div>
+</template>
+```
+
+```
+// 在client/myapp.js中: 响应式的helper函数
+Template.forecast.helpers({
+  prediction: function () {
+    return Session.get("weather");
+  }
+});
+```
+
+```
+// 在JavaScript的console中
+> Session.set("weather", "cloudy");
+> document.body.innerHTML
+ => "<h1>Today's weather!</h1> <div>It'll be cloudy tonight</div>"
+
+> Session.set("weather", "cool and dry");
+> document.body.innerHTML
+ => "<h1>Today's weather!</h1> <div>It'll be cool and dry tonight</div>"
+```
+
+可以使用`{{#each}}`来迭代数组和数据库cursor
+
+```
+// 在文件myapp.html中
+<template name="players">
+  {{#each topScorers}}
+    <div>{{name}}</div>
+  {{/each}}
+</template>
+```
+
+```
+// 在文件myapp.js中
+Template.players.helpers({
+  topScorers: function () {
+    return Users.find({score: {$gt: 100}}, {sort: {score: -1}});
+  }
+});
+```
+
+在这种情况下，数据来自数据库查询。当数据库cursor传给`{{#each}}`的时候，它会连接所有的机械项来有效地添加或者移除DOM节点来作为输入查询的结果。
+
+Helpers可以带有参数，他们在`this`中接受当前模板上下文数据。注意有些block helpers会改变当前上下文（尤其是`{{#each}}`和`{{#with}}`）:
+
+```
+// in a JavaScript file
+Template.players.helpers({
+  leagueIs: function (league) {
+    return this.league === league;
+  }
+});
+```
+
+```
+// in a HTML file
+<template name="players">
+  {{#each topScorers}}
+    {{#if leagueIs "junior"}}
+      <div>Junior: {{name}}</div>
+    {{/if}}
+    {{#if leagueIs "senior"}}
+      <div>Senior: {{name}}</div>
+    {{/if}}
+  {{/each}}
+</template>
+```
+
+Helpers也可以被用来传递数据常量。
+
+```
+// Works fine with {{#each sections}}
+Template.report.helpers({
+  sections: ["Situation", "Complication", "Resolution"]
+});
+```
+
+最后，你可以在一个模板中使用events函数来绑定时间处理函数。传递给events的对象被记录在Event Maps中
+。event处理函数的`this`变量，是触发该事件的元素的数据上下文。
+
+```
+// myapp.html文件
+<template name="scores">
+  {{#each player}}
+    {{> playerScore}}
+  {{/each}}
+</template>
+
+<template name="playerScore">
+  <div>{{name}}: {{score}}
+    <span class="give-points">Give points</span>
+  </div>
+</template>
+```
+
+```
+// myapp.js
+Template.playerScore.events({
+  'click .give-points': function () {
+    Users.update(this._id, {$inc: {score: 2}});
+  }
+});
+```
+
+要了解更多地关于Spacebars的细节，阅读[Spacebars README][]吧。
+
+[Spacebars README]: https://github.com/meteor/meteor/blob/devel/packages/spacebars/README.md
+
+## 使用Packages
+
+All of the functionality you've read about so far is implemented in standard Meteor packages. This is possible thanks to Meteor's unusually powerful isomorphic package and build system. Isomorphic means the same packages work in the web browser, in mobile apps, and on the server. Packages can also contain plugins that extend the build process, such as coffeescript (CoffeeScript compilation) or templating (compiling HTML templates).
+
+Anyone can publish a Meteor package, and thousands of community-written packages have been published to date. The easiest way to browse these packages is Atmosphere, by Percolate Studio. You can also use the meteor search and meteor show commands.
+
+You can add packages to your project with meteor add and remove them with meteor remove. Additionally, meteor list will tell you what packages your project is using, and meteor update will update them to the newest versions when possible.
+
+By default all apps include the meteor-platform package. This automatically pulls in the packages that make up the core Meteor stack. If you want to build your own custom stack, just remove meteor-platform from your app and add back in whichever of the standard packages you want to keep.
+
+Meteor uses a single-loading packaging system, meaning that it loads just one version of every package. Before adding or upgrading to a particular version of a package, Meteor uses a constraint solver to check if doing so will cause other packages to break. By default, Meteor will choose conservatively. When adding transitive dependencies (packages that other packages, but not the application itself) depend on, Meteor will try to choose the earlier version.
+
+In addition to the packages in the official Meteor release being used by your app, meteor list and meteor add also search the packages directory at the top of your app. You can also use the packages directory to break your app into subpackages for your convenience, or to test packages that you might want to publish. See Writing Packages.
+
+Namespacing
+
+Meteor's namespacing support makes it easy to write large applications in JavaScript. Each package that you use in your app exists in its own separate namespace, meaning that it sees only its own global variables and any variables provided by the packages that it specifically uses. Here's how it works.
+
+When you declare a top-level variable, you have a choice. You can make the variable File Scope or Package Scope.
+
+// File Scope. This variable will be visible only inside this
+// one file. Other files in this app or package won't see it.
+var alicePerson = {name: "alice"};
+
+// Package Scope. This variable is visible to every file inside
+// of this package or app. The difference is that 'var' is
+// omitted.
+bobPerson = {name: "bob"};
+Notice that this is just the normal JavaScript syntax for declaring a variable that is local or global. Meteor scans your source code for global variable assignments and generates a wrapper that makes sure that your globals don't escape their appropriate namespace.
+
+In addition to File Scope and Package Scope, there are also Exports. An export is a variable that a package makes available to you when you use it. For example, the email package exports the Email variable. If your app uses the email package (and only if it uses the email package!) then your app can see Email and you can call Email.send. Most packages have only one export, but some packages might have two or three (for example, a package that provides several classes that work together).
+
+You see only the exports of the packages that you use directly. If you use package A, and package A uses package B, then you only see package A's exports. Package B's exports don't "leak" into your namespace just because you used package A. This keeps each namespace nice and tidy. Each app or package only sees their own globals plus the APIs of the packages that they specifically asked for.
+
+When debugging your app, your browser's JavaScript console behaves as if it were attached to your app's namespace. You see your app's globals and the exports of the packages that your app uses directly. You don't see the variables from inside those packages, and you don't see the exports of your transitive dependencies (packages that aren't used directly by your app, but that are used by packages that are used by your app).
+
+If you want to look inside packages from inside your in-browser debugger, you've got two options:
+
+Set a breakpoint inside package code. While stopped on that breakpoint, the console will be in the package's namespace. You'll see the package's package-scope variables, imports, and also any file-scope variables for the file you're stopped in.
+
+If a package foo is included in your app, regardless of whether your app uses it directly, its exports are available in Package.foo. For example, if the email package is loaded, then you can access Package.email.Email.send even from namespaces that don't use the email package directly.
+
+When declaring functions, keep in mind that function x () {} is just shorthand for var x = function x () {} in JavaScript. Consider these examples:
+
+// This is the same as 'var x = function x () ...'. So x() is
+// file-scope and can be called only from within this one file.
+function x () { ... }
+
+// No 'var', so x() is package-scope and can be called from
+// any file inside this app or package.
+x = function () { ... }
+Technically speaking, globals in an app (as opposed to in a package) are actually true globals. They can't be captured in a scope that is private to the app code, because that would mean that they wouldn't be visible in the console during debugging! This means that app globals actually end up being visible in packages. That should never be a problem for properly written package code (since the app globals will still be properly shadowed by declarations in the packages). You certainly shouldn't depend on this quirk, and in the future Meteor may check for it and throw an error if you do.
+
+Deploying
+
+Meteor is a full application server. We include everything you need to deploy your application on the internet: you just provide the JavaScript, HTML, and CSS.
+
+Running on Meteor's infrastructure
+
+The easiest way to deploy your application is to use meteor
+deploy. We provide it because it's what, personally, we've always wanted: an easy way to take an app idea, flesh it out over a weekend, and put it out there for the world to use, with nothing getting in the way of creativity.
+
+meteor deploy myapp.meteor.com
+Your application is now available at myapp.meteor.com. If this is the first time deploying to this hostname, Meteor creates a fresh empty database for your application. If you want to deploy an update, Meteor will preserve the existing data and just refresh the code.
+
+You can also deploy to your own domain. Just set up the hostname you want to use as a CNAME to origin.meteor.com, then deploy to that name.
+
+meteor deploy www.myapp.com
+We provide this as a free service so you can try Meteor. It is also helpful for quickly putting up internal betas, demos, and so on. For more information, see meteor deploy.
+
+Running on your own infrastructure
+
+You can also run your application on your own infrastructure or any hosting provider that can run Node.js apps.
+
+To get started, run
+
+meteor build my_directory
+This command will generate a fully-contained Node.js application in the form of a tarball. To run this application, you need to provide Node.js 0.10 and a MongoDB server. (The current release of Meteor has been tested with Node 0.10.36.) You can then run the application by invoking node, specifying the HTTP port for the application to listen on, and the MongoDB endpoint.
+
+cd my_directory
+(cd programs/server && npm install)
+env PORT=3000 MONGO_URL=mongodb://localhost:27017/myapp node main.js
+Some packages might require other environment variables. For example, the email package requires a MAIL_URL environment variable.
+
+Writing packages
+
+Writing Meteor packages is easy. To initialize a meteor package, run meteor create --package username:packagename, where username is your Meteor Developer username. This will create a package from scratch and prefill the directory with a package.js control file and some javascript. By default, Meteor will take the package name from the name of the directory that contains the package.js file. Don't forget to run meteor add [packagename], even if the package is internal to the app, in order to use it.
+
+Meteor promises repeatable builds for both packages and applications. This means that, if you built your package on a machine, then checked the code into a repository and checked it out elsewhere, you should get the same result. In your package directory, you will find an automatically generated .versions file. This file specifies the versions of all packages used to build your package and is part of the source. Check it into version control to ensure repeatable builds across machines.
+
+Sometimes, packages do not just stand on their own, but function in the context of an app (specifically, packages in the packages directory of an app). In that case, the app's context will take precedence. Rather than using the .versions file as a guide, we will build the package with the same dependencies as used by the app (we think that, in practice, it would be confusing to find your local packages built with different versions of things).
+
+Meteor uses extended semver versioning for its packages: that means that the version number has three parts separated by dots: major version, minor version and patch version (for example: 1.2.3) with an optional pre-release version. You can read more about it on semver.org. Additionally, because some meteor packages wrap external libraries, Meteor supports the convention of using _ to denote a wrap number.
+
+You can read more about package.js files in the API section.
+
+A word on testing: since testing is an important part of the development process, there are two common ways to test a package:
+
+Integration tests (putting a package directly into an application, and writing tests against the application) is the most common way to test a package. After creating your package, add it to your app's /packages directory and run meteor
+add. This will add your package to your app as a local package. You can then test and run your app as usual. Meteor will detect and respond to changes to your local package, just as it does to your app files.
+
+Unit tests are run with the command meteor test-packages
+package-name. As described in the package.js section, you can use the package.js file to specify where your unit tests are located. If you have a repository that contains only the package source, you can test your package by specifying the path to the package directory (which must contain a slash), such as meteor test-packages ./.
+
+To publish a package, run meteor publish from the package directory. There are some extra restrictions on published packages: they must contain a version (Meteor packages are versioned using strict semver versioning) and their names must be prefixed with the username of the author and a colon, like so: iron:router. This namespacing allows for more descriptive and on-topic package names.
