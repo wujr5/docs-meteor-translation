@@ -590,9 +590,7 @@ function x () { ... }
 x = function () { ... }
 ```
 
-> Technically speaking, globals in an app (as opposed to in a package) are actually true globals. They can't be captured in a scope that is private to the app code, because that would mean that they wouldn't be visible in the console during debugging! This means that app globals actually end up being visible in packages. That should never be a problem for properly written package code (since the app globals will still be properly shadowed by declarations in the packages). You certainly shouldn't depend on this quirk, and in the future Meteor may check for it and throw an error if you do.
-
-> 在技术层面上说，在应用中（不是在一个pakcage中）的全局变量实质上是真正的全局变量。对应用代码来说是私有的作用域，因为这样就意味着他们调试时在控制台中是不可见的！
+> 在技术层面上说，在应用中（不是在一个pakcage中）的全局变量实质上是真正的全局变量。它们在应用代码的私有作用域中被捕获到，因为这样就意味着它们调试时在控制台中是不可见的！这样一位这应用的全局变量实际上最终只能在package层面上可见。这不应该是你正常写package代码的问题（因为应用的全局变量仍然可以被package中的声明所覆盖）。你一定不能依赖于这个奇怪的特性，在未来Meteor会给它添加检查，如果你这样用了，会抛出一个错误。
 
 
 ## 部署
