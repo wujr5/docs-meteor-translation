@@ -564,11 +564,11 @@ var alicePerson = {name: "alice"};
 bobPerson = {name: "bob"};
 ```
 
-Notice that this is just the normal JavaScript syntax for declaring a variable that is local or global. Meteor scans your source code for global variable assignments and generates a wrapper that makes sure that your globals don't escape their appropriate namespace.
+注意这是声明一个局部或者全局变量的正常的JavaScript语法。Meteor扫描你的源代码来寻找变量赋值语句，同时产生包装来确保你的全局变量不会超出它们的适当的命名空间。
 
-In addition to File Scope and Package Scope, there are also Exports. An export is a variable that a package makes available to you when you use it. For example, the email package exports the Email variable. If your app uses the email package (and only if it uses the email package!) then your app can see Email and you can call Email.send. Most packages have only one export, but some packages might have two or three (for example, a package that provides several classes that work together).
+除了文件作用域和Package作用域，还有Exports。一个export就是一个当你使用它的时候package使得它可访问的一个变量。比如，`email` package输出`Email`变量。如果你的应用使用`email` package（当且仅当它使用`email` package！），那么，你的应用可以看到`Email`和你可以调用`Emali.send`。绝大部分的package都是仅有一个export，但是一些package可能有两到三个export（比如，比个提供几种一起工作的类的package）。
 
-You see only the exports of the packages that you use directly. If you use package A, and package A uses package B, then you only see package A's exports. Package B's exports don't "leak" into your namespace just because you used package A. This keeps each namespace nice and tidy. Each app or package only sees their own globals plus the APIs of the packages that they specifically asked for.
+你可以只能看到你直接使用的package的export。如果你使用package A，同时package A使用package B，那么你仅仅能看到package A的export，package B的export没有加入到你的命名空间中，只是因为你使用的是package A。这能保证每一个命名空间都很好且简洁。每一个应用或者package仅仅只能看到他们自己的全局变量再加上它们特别要求的package的API。
 
 When debugging your app, your browser's JavaScript console behaves as if it were attached to your app's namespace. You see your app's globals and the exports of the packages that your app uses directly. You don't see the variables from inside those packages, and you don't see the exports of your transitive dependencies (packages that aren't used directly by your app, but that are used by packages that are used by your app).
 
