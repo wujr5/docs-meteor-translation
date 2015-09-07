@@ -792,27 +792,36 @@ Meteor.release | Anywhere
 
 ---
 
-## Publish and subscribe
+## 发布和订阅
 
-These functions control how Meteor servers publish sets of records and how clients can subscribe to those sets.
+这些函数控制着Meteor服务器如何发布记录集合和客户端如何订阅那些集合。
 
-Server Meteor.publish(name, func)
-ddp/livedata_server.js, line 1392
-Publish a record set.
+Meteor.publish(name, func) | Server
+-------------------------- | ------
+[ddp/livedata_server.js, line 1392][Meteor.publish] |
 
-Arguments
-name String
-Name of the record set. If null, the set has no name, and the record set is automatically sent to all connected clients.
+[Meteor.publish]: https://github.com/meteor/meteor/blob/master/packages/ddp/livedata_server.js#L1392
 
-func Function
-Function called on the server each time a client subscribes. Inside the function, this is the publish handler object, described below. If the client passed arguments to subscribe, the function is called with the same arguments.
+> 发布一个记录集合。
+
+> * #### Arguments
+	* **name** String  
+	记录集合的名字。如果是`null`，集合就没有名字，记录集合会自动的发送到所有连接上的客户端。
+	
+> 	* **func** Function  
+	每一次发生客户端的订阅后，在服务端执行的函数。在函数内部，`this`是`publish`处理函数的对象，下面会描述。如果客户端传递了参数给`subscribe`函数，这个函数调用时就会接受相同参数。
+
+---
 
 To publish records to clients, call Meteor.publish on the server with two parameters: the name of the record set, and a publish function that Meteor will call each time a client subscribes to the name.
 
 Publish functions can return a Collection.Cursor, in which case Meteor will publish that cursor's documents to each subscribed client. You can also return an array of Collection.Cursors, in which case Meteor will publish all of the cursors.
 
-If you return multiple cursors in an array, they currently must all be from different collections. We hope to lift this restriction in a future release.
 
+
+> If you return multiple cursors in an array, they currently must all be from different collections. We hope to lift this restriction in a future release.
+
+```
 // server: publish the rooms collection, minus secret info.
 Meteor.publish("rooms", function () {
   return Rooms.find({}, {fields: {secretInfo: 0}});
@@ -833,12 +842,15 @@ Meteor.publish("roomAndMessages", function (roomId) {
     Messages.find({roomId: roomId})
   ];
 });
+```
+
 Alternatively, a publish function can directly control its published record set by calling the functions added (to add a new document to the published record set), changed (to change or clear some fields on a document already in the published record set), and removed (to remove documents from the published record set). These methods are provided by this in your publish function.
 
 If a publish function does not return a cursor or array of cursors, it is assumed to be using the low-level added/changed/removed interface, and it must also call ready once the initial record set is complete.
 
 Example:
 
+```
 // server: publish the current size of a collection
 Meteor.publish("counts-by-room", function (roomId) {
   var self = this;
@@ -903,9 +915,11 @@ Meteor.publish("secretData", function () {
     return [];
   }
 });
+```
+
 Since publish functions usually expect particular types as arguments, use check liberally to ensure the arguments have the correct types and structure.
 
-Meteor will emit a warning message if you call Meteor.publish in a project that includes the autopublish package. Your publish function will still work.
+> Meteor will emit a warning message if you call Meteor.publish in a project that includes the autopublish package. Your publish function will still work.
 
 Server this.userId
 ddp/livedata_server.js, line 912
@@ -998,6 +1012,7 @@ Optional. May include onStop and onReady callbacks. If there is an error, it is 
 
 When you subscribe to a record set, it tells the server to send records to the client. The client stores these records in local Minimongo collections, with the same name as the collection argument used in the publish handler's added, changed, and removed callbacks. Meteor will queue incoming records until you declare the Mongo.Collection on the client with the matching collection name.
 
+```
 // okay to subscribe (and possibly receive data) before declaring
 // the client collection that will hold it.  assume "allplayers"
 // publishes data from server's "players" collection.
@@ -1006,6 +1021,8 @@ Meteor.subscribe("allplayers");
 // client queues incoming players records until ...
 ...
 Players = new Mongo.Collection("players");
+```
+
 The client will see a document if the document is currently in the published record set of any of its subscriptions.
 
 The onReady callback is called with no arguments when the server marks the subscription as ready. The onStop callback is called with a Meteor.Error if the subscription fails or is terminated by the server. If the subscription is stopped by calling stop on the subscription handle or inside the publication, onStop is called with no arguments.
