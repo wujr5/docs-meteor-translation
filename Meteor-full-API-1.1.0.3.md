@@ -597,31 +597,39 @@ x = function () { ... }
 
 Meteor is a full application server. We include everything you need to deploy your application on the internet: you just provide the JavaScript, HTML, and CSS.
 
-Running on Meteor's infrastructure
+### Running on Meteor's infrastructure
 
 The easiest way to deploy your application is to use meteor
 deploy. We provide it because it's what, personally, we've always wanted: an easy way to take an app idea, flesh it out over a weekend, and put it out there for the world to use, with nothing getting in the way of creativity.
 
-meteor deploy myapp.meteor.com
+`meteor deploy myapp.meteor.com`
+
 Your application is now available at myapp.meteor.com. If this is the first time deploying to this hostname, Meteor creates a fresh empty database for your application. If you want to deploy an update, Meteor will preserve the existing data and just refresh the code.
+
+
 
 You can also deploy to your own domain. Just set up the hostname you want to use as a CNAME to origin.meteor.com, then deploy to that name.
 
-meteor deploy www.myapp.com
+`meteor deploy www.myapp.com`
+
 We provide this as a free service so you can try Meteor. It is also helpful for quickly putting up internal betas, demos, and so on. For more information, see meteor deploy.
 
-Running on your own infrastructure
+### Running on your own infrastructure
 
 You can also run your application on your own infrastructure or any hosting provider that can run Node.js apps.
 
 To get started, run
 
-meteor build my_directory
+`meteor build my_directory`
+
 This command will generate a fully-contained Node.js application in the form of a tarball. To run this application, you need to provide Node.js 0.10 and a MongoDB server. (The current release of Meteor has been tested with Node 0.10.36.) You can then run the application by invoking node, specifying the HTTP port for the application to listen on, and the MongoDB endpoint.
 
+```
 cd my_directory
 (cd programs/server && npm install)
 env PORT=3000 MONGO_URL=mongodb://localhost:27017/myapp node main.js
+```
+
 Some packages might require other environment variables. For example, the email package requires a MAIL_URL environment variable.
 
 ## 写packages
@@ -630,7 +638,7 @@ Writing Meteor packages is easy. To initialize a meteor package, run meteor crea
 
 Meteor promises repeatable builds for both packages and applications. This means that, if you built your package on a machine, then checked the code into a repository and checked it out elsewhere, you should get the same result. In your package directory, you will find an automatically generated .versions file. This file specifies the versions of all packages used to build your package and is part of the source. Check it into version control to ensure repeatable builds across machines.
 
-Sometimes, packages do not just stand on their own, but function in the context of an app (specifically, packages in the packages directory of an app). In that case, the app's context will take precedence. Rather than using the .versions file as a guide, we will build the package with the same dependencies as used by the app (we think that, in practice, it would be confusing to find your local packages built with different versions of things).
+> Sometimes, packages do not just stand on their own, but function in the context of an app (specifically, packages in the packages directory of an app). In that case, the app's context will take precedence. Rather than using the .versions file as a guide, we will build the package with the same dependencies as used by the app (we think that, in practice, it would be confusing to find your local packages built with different versions of things).
 
 Meteor uses extended semver versioning for its packages: that means that the version number has three parts separated by dots: major version, minor version and patch version (for example: 1.2.3) with an optional pre-release version. You can read more about it on semver.org. Additionally, because some meteor packages wrap external libraries, Meteor supports the convention of using _ to denote a wrap number.
 
@@ -638,10 +646,10 @@ You can read more about package.js files in the API section.
 
 A word on testing: since testing is an important part of the development process, there are two common ways to test a package:
 
-Integration tests (putting a package directly into an application, and writing tests against the application) is the most common way to test a package. After creating your package, add it to your app's /packages directory and run meteor
+* Integration tests (putting a package directly into an application, and writing tests against the application) is the most common way to test a package. After creating your package, add it to your app's /packages directory and run meteor
 add. This will add your package to your app as a local package. You can then test and run your app as usual. Meteor will detect and respond to changes to your local package, just as it does to your app files.
 
-Unit tests are run with the command meteor test-packages
+* Unit tests are run with the command meteor test-packages
 package-name. As described in the package.js section, you can use the package.js file to specify where your unit tests are located. If you have a repository that contains only the package source, you can test your package by specifying the path to the package directory (which must contain a slash), such as meteor test-packages ./.
 
 To publish a package, run meteor publish from the package directory. There are some extra restrictions on published packages: they must contain a version (Meteor packages are versioned using strict semver versioning) and their names must be prefixed with the username of the author and a colon, like so: iron:router. This namespacing allows for more descriptive and on-topic package names.
