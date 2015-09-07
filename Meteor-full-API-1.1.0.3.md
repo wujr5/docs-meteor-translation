@@ -570,27 +570,30 @@ bobPerson = {name: "bob"};
 
 你可以只能看到你直接使用的package的export。如果你使用package A，同时package A使用package B，那么你仅仅能看到package A的export，package B的export没有加入到你的命名空间中，只是因为你使用的是package A。这能保证每一个命名空间都很好且简洁。每一个应用或者package仅仅只能看到他们自己的全局变量再加上它们特别要求的package的API。
 
-When debugging your app, your browser's JavaScript console behaves as if it were attached to your app's namespace. You see your app's globals and the exports of the packages that your app uses directly. You don't see the variables from inside those packages, and you don't see the exports of your transitive dependencies (packages that aren't used directly by your app, but that are used by packages that are used by your app).
+当你调试你的应用的时候，你的浏览器的JavaScript控制台表现得就像它是依附在你的应用的命名空间一样。你能看到你的应用的全局变量，和你的应用直接使用的package的exports。你不能看到在package内部的变量，同时你不能考到你的传递依赖的export（不是你的应用直接使用的package，但是它们被你应用使用的其它包使用）。
 
-If you want to look inside packages from inside your in-browser debugger, you've got two options:
+如果你想在你的浏览器内部的调试器去看package的内部，你有两个选择：
 
-Set a breakpoint inside package code. While stopped on that breakpoint, the console will be in the package's namespace. You'll see the package's package-scope variables, imports, and also any file-scope variables for the file you're stopped in.
+* 在package代码中设置断点。当代码执行到断点的时候，控制台会在package的命名空间中。你会看到package的基于package的作用域下的变量，import，和你所停在的文件的文件作用域下的变量。
 
-If a package foo is included in your app, regardless of whether your app uses it directly, its exports are available in Package.foo. For example, if the email package is loaded, then you can access Package.email.Email.send even from namespaces that don't use the email package directly.
+* 如果package `foo`包含在你的应用当中的话 ，不管是不是你的应用直接使用它，她的exports可以通过`Package.foo`访问到。比如，如果`email` package被加载进来，然后你可以访问`Package.email.Email.send`，甚至在你不会直接使用`email` package的命名空间中也是可以这样。
 
-When declaring functions, keep in mind that function x () {} is just shorthand for var x = function x () {} in JavaScript. Consider these examples:
+当声明函数的时候，记住，在JavaScript中，`function x() {}`只是`var x = function x () {}`的缩写。考虑一下例子：
 
 ```
-// This is the same as 'var x = function x () ...'. So x() is
-// file-scope and can be called only from within this one file.
+// 这跟 'var x = function x () ...'是一样的。
+// 所以x()是文件作用域的，只能在这一个文件之内被调用。
 function x () { ... }
 
-// No 'var', so x() is package-scope and can be called from
-// any file inside this app or package.
+// 没有 'var'，所以x()是package作用域的，
+// 可以在这个应用或者package内的任何文件中被调用
 x = function () { ... }
 ```
 
 > Technically speaking, globals in an app (as opposed to in a package) are actually true globals. They can't be captured in a scope that is private to the app code, because that would mean that they wouldn't be visible in the console during debugging! This means that app globals actually end up being visible in packages. That should never be a problem for properly written package code (since the app globals will still be properly shadowed by declarations in the packages). You certainly shouldn't depend on this quirk, and in the future Meteor may check for it and throw an error if you do.
+
+> 在技术层面上说，在应用中（不是在一个pakcage中）的全局变量实质上是真正的全局变量。对应用代码来说是私有的作用域，因为这样就意味着他们调试时在控制台中是不可见的！
+
 
 ## 部署
 
