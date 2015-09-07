@@ -656,3 +656,18 @@ add. This will add your package to your app as a local package. You can then tes
 package-name. As described in the package.js section, you can use the package.js file to specify where your unit tests are located. If you have a repository that contains only the package source, you can test your package by specifying the path to the package directory (which must contain a slash), such as meteor test-packages ./.
 
 To publish a package, run meteor publish from the package directory. There are some extra restrictions on published packages: they must contain a version (Meteor packages are versioned using strict semver versioning) and their names must be prefixed with the username of the author and a colon, like so: iron:router. This namespacing allows for more descriptive and on-topic package names.
+
+你可以在API部分阅读到有关[package.js][]文件的相关信息。
+
+[package.js]: http://docs.meteor.com/#packagejs
+
+关于测试：测试在开发过程中是一个重要的部分，有两种一般的测试测试package的方法：
+
+* 集成测试（吧package直接放到应用当中，针对应用来写测试）是测试一个package的最通用的方法。在创建了你的package之后，把它添加到你的应用的`/packages`目录下面，并且运行`meteor add`。这回吧你的package作为一个本地package添加到你的应用当中。然后你就可以像通常一样测试并运行的的应用。Meteor会检测和响应你的本地package的变化，就像是你应用程序的文件一样。
+
+* 单元测试是用命令`meteor test-packages package-name`来运行的。就像在[package.js][]部分所描述的，你可以使用[package.js][]文件来指定测试你的那个单元。如果你有一个仅仅包含package源代码的仓库，你可以通过指定package目录（必须包含斜线）的路径来测试你的package，比如`meteor test-packages ./`。
+
+在package目录下运行`meteor publish`可以发布一个package。发布package有一些额外的限制：它们必须包含一个版本（Meteor的package是使用严格的[semver][semver.org]来进行版本控制的）、它们的名字必须以用户名和一个冒号为前缀，就像：`iron:router`一样。这个命名空间允许更具描述性的和相互连接的package名。
+
+
+
