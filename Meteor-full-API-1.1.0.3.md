@@ -595,24 +595,25 @@ x = function () { ... }
 
 ## 部署
 
-Meteor is a full application server. We include everything you need to deploy your application on the internet: you just provide the JavaScript, HTML, and CSS.
+Meteor是一个完整的应用服务。我们包含了所有你把应用部署到网上所需要的东西：你只需要提供JavaScript，HTML和CSS。
 
-### Running on Meteor's infrastructure
+### 在Meteor的基础设施上运行
 
-The easiest way to deploy your application is to use meteor
-deploy. We provide it because it's what, personally, we've always wanted: an easy way to take an app idea, flesh it out over a weekend, and put it out there for the world to use, with nothing getting in the way of creativity.
+部署你的应用的最简单的方法就是使用`meteor deploy`。我们提供这个功能是因为，就我们来说，这一直是我们想要的：给这样的过程提供简单地方式：有了一个想法，在一个周末把它做出来，然后把它放到一个全世界都可以使用的地方，不会有什么东西阻挡创造力。
 
 `meteor deploy myapp.meteor.com`
 
-Your application is now available at myapp.meteor.com. If this is the first time deploying to this hostname, Meteor creates a fresh empty database for your application. If you want to deploy an update, Meteor will preserve the existing data and just refresh the code.
+你的应用现在已经可以在myapp.meteor.com上了。如果这是第一次部署到这个主机名上，Meteor会创建一个新的空数据库给你的应用。如果你想要部署一个更新，Meteor会保存原来的存在的数据库，并且只更新代码。
 
-
-
-You can also deploy to your own domain. Just set up the hostname you want to use as a CNAME to origin.meteor.com, then deploy to that name.
+你也可以部署到你自己的域名上去。只需要把你想要使用的主机名设置为一个指向`origin.meteor.com`的CNAME，然后部署这个名字。
 
 `meteor deploy www.myapp.com`
 
 We provide this as a free service so you can try Meteor. It is also helpful for quickly putting up internal betas, demos, and so on. For more information, see meteor deploy.
+
+我们把这个作为免费服务提供出去，所以你可以尝试一下Meteor。快速构建内部的beta，demo等等是很有用处的。更多信息请访问[meteor deploy][]
+
+[meteor deploy]: http://docs.meteor.com/#meteordeploy
 
 ### Running on your own infrastructure
 
