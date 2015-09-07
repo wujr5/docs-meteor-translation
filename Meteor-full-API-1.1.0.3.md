@@ -669,7 +669,7 @@ Your JavaScript code can run in two environments: the client (browser), and the 
 
 [Meteor.isClient]: https://github.com/meteor/meteor/blob/master/packages/meteor/client_environment.js#L13
 
-Boolean variable. True if running in client environment.
+> Boolean variable. True if running in client environment.
 
 ---
 
@@ -680,7 +680,7 @@ Meteor.isServer | Anywhere
 
 [Meteor.isServer]: https://github.com/meteor/meteor/blob/master/packages/meteor/client_environment.js#L21
 
-Boolean variable. True if running in server environment.
+> Boolean variable. True if running in server environment.
 
 ---
 
@@ -692,7 +692,7 @@ Meteor.isCordova | Anywhere
 
 [Meteor.isCordova]: https://github.com/meteor/meteor/blob/master/packages/meteor/cordova_environment.js#L7
 
-Boolean variable. True if running in a Cordova mobile environment.
+> Boolean variable. True if running in a Cordova mobile environment.
 
 ---
 
@@ -702,11 +702,11 @@ Meteor.startup(func) | Anywhere
 
 [Meteor.startup(func)]: https://github.com/meteor/meteor/blob/master/packages/meteor/startup_client.js#L57
 
-* Run code when a client or a server starts.
+> * Run code when a client or a server starts.
 
-	* #### Arguments
+>	* #### Arguments
 
-		* **func** Function  
+>		* **func** Function  
 		A function to run on startup.
 
 ---
@@ -735,13 +735,13 @@ Meteor.wrapAsync(func, [context]) | Anywhere
 
 [Meteor.wrapAsync]: https://github.com/meteor/meteor/blob/master/packages/meteor/helpers.js#L90
 
-* Wrap a function that takes a callback function as its final parameter. On the server, the wrapped function can be used either synchronously (without passing a callback) or asynchronously (when a callback is passed). On the client, a callback is always required; errors will be logged if there is no callback. If a callback is provided, the environment captured when the original function was called will be restored in the callback.
+> * Wrap a function that takes a callback function as its final parameter. On the server, the wrapped function can be used either synchronously (without passing a callback) or asynchronously (when a callback is passed). On the client, a callback is always required; errors will be logged if there is no callback. If a callback is provided, the environment captured when the original function was called will be restored in the callback.
 
-	* #### Arguments
-		* **func** Function  
+>	* #### Arguments
+>		* **func** Function  
 		A function that takes a callback as its final parameter
 
-		* **context Object**  
+>		* **context Object**  
 		Optional this object against which the original function will be invoked
 
 ---
@@ -752,21 +752,21 @@ Meteor.absoluteUrl([path], [options]) | Anywhere
 
 [Meteor.absoluteUrl]: https://github.com/meteor/meteor/blob/master/packages/meteor/url_common.js#L10
 
-* Generate an absolute URL pointing to the application. The server reads from the ROOT_URL environment variable to determine where it is running. This is taken care of automatically for apps deployed with meteor deploy, but must be provided when using meteor build.
+> * Generate an absolute URL pointing to the application. The server reads from the ROOT_URL environment variable to determine where it is running. This is taken care of automatically for apps deployed with meteor deploy, but must be provided when using meteor build.
 
-	* #### Arguments  
-		* path String  
+>	* #### Arguments  
+>		* path String  
 		A path to append to the root URL. Do not include a leading "/".
 
-		* Options  
+>		* Options  
 		secure Boolean  
 		Create an HTTPS URL.
 
-		* replaceLocalhost Boolean  
+>		* replaceLocalhost Boolean  
 		Replace localhost with 127.0.0.1. Useful for services that don't recognize 
 		localhost as a domain name.
 
-		* rootUrl String  
+>		* rootUrl String  
 		Override the default ROOT_URL from the server environment. For example: "http://foo.example.com"
 
 ---
@@ -777,7 +777,7 @@ Meteor.settings | Anywhere
 
 [Meteor.settings]: https://github.com/meteor/meteor/blob/master/packages/meteor/client_environment.js#L32
 
-* Meteor.settings contains deployment-specific configuration options. You can initialize settings by passing the --settings option (which takes the name of a file containing JSON data) to meteor run or meteor deploy. When running your server directly (e.g. from a bundle), you instead specify settings by putting the JSON directly into the METEOR_SETTINGS environment variable. If you don't provide any settings, Meteor.settings will be an empty object. If the settings object contains a key named public, then Meteor.settings.public will be available on the client as well as the server. All other properties of Meteor.settings are only defined on the server.
+> * Meteor.settings contains deployment-specific configuration options. You can initialize settings by passing the --settings option (which takes the name of a file containing JSON data) to meteor run or meteor deploy. When running your server directly (e.g. from a bundle), you instead specify settings by putting the JSON directly into the METEOR_SETTINGS environment variable. If you don't provide any settings, Meteor.settings will be an empty object. If the settings object contains a key named public, then Meteor.settings.public will be available on the client as well as the server. All other properties of Meteor.settings are only defined on the server.
 
 ---
 
@@ -787,6 +787,6 @@ Meteor.release | Anywhere
 
 [Meteor.release]: https://github.com/meteor/meteor/blob/master/packages/meteor/helpers.js#L11
 
-* Meteor.release is a string containing the name of the release with which the project was built (for example, "1.2.3"). It is undefined if the project was built using a git checkout of Meteor.
+> * Meteor.release is a string containing the name of the release with which the project was built (for example, "1.2.3"). It is undefined if the project was built using a git checkout of Meteor.
 
 ---
