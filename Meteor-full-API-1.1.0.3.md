@@ -659,7 +659,7 @@ Meteor为它的package使用拓展的server版本控制：这意味着版本号�
 
 # The Meteor API
 
-Your JavaScript code can run in two environments: the client (browser), and the server (a Node.js container on a server). For each function in this API reference, we'll indicate if the function is available just on the client, just on the server, or Anywhere.
+你的JavaScript代码可以在两种环境中运行：客户端（浏览器），和服务端（服务器上德一个Node.js容器）。在这个API reference的每一个函数，我们都标明了函数是只能在client端、或者只能在server端或者Anywhere被访问到。
 
 ## Meteor Core
 
@@ -669,7 +669,7 @@ Your JavaScript code can run in two environments: the client (browser), and the 
 
 [Meteor.isClient]: https://github.com/meteor/meteor/blob/master/packages/meteor/client_environment.js#L13
 
-> Boolean variable. True if running in client environment.
+> 布尔类型变量。如果是运行在客户端环境则为`true`。
 
 ---
 
@@ -680,7 +680,7 @@ Meteor.isServer | Anywhere
 
 [Meteor.isServer]: https://github.com/meteor/meteor/blob/master/packages/meteor/client_environment.js#L21
 
-> Boolean variable. True if running in server environment.
+> 布尔类型变量。如果运行在服务端环境则为`true`。
 
 ---
 
