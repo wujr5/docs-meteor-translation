@@ -684,7 +684,7 @@ Meteor.isServer | Anywhere
 
 ---
 
-> Meteor.isServer can be used to limit where code runs, but it does not prevent code from being sent to the client. Any sensitive code that you don't want served to the client, such as code containing passwords or authentication mechanisms, should be kept in the server directory.
+> `Meteor.isServer`可以用来限制代码在什么地方运行，但是它不会住址代码加载到客户端。任何你不想发送到客户端的敏感代码，比如包含密码和授权机制的代码，应该放在`server`文件夹下。
 
 Meteor.isCordova | Anywhere
 ---------------- | --------
@@ -692,7 +692,7 @@ Meteor.isCordova | Anywhere
 
 [Meteor.isCordova]: https://github.com/meteor/meteor/blob/master/packages/meteor/cordova_environment.js#L7
 
-> Boolean variable. True if running in a Cordova mobile environment.
+> 布尔类型变量。如果代码运行在Cordova移动环境下为`true`
 
 ---
 
@@ -702,24 +702,24 @@ Meteor.startup(func) | Anywhere
 
 [Meteor.startup(func)]: https://github.com/meteor/meteor/blob/master/packages/meteor/startup_client.js#L57
 
-> * Run code when a client or a server starts.
+> * 当client或者server开始的时候运行代码。
 
 >	* #### Arguments
 
 >		* **func** Function  
-		A function to run on startup.
+		在`startup`运行的函数。
 
 ---
 
-On a server, the function will run as soon as the server process is finished starting. On a client, the function will run as soon as the DOM is ready.
+在服务端，一旦服务端进程完成了开始的工作后，这个函数就会开始运行。在客户端，一旦DOM加载完成后这个函数就会开始运行。
 
-The startup callbacks are called in the same order as the calls to Meteor.startup were made.
+`startup`的回调函数，会以他们创建的顺序被调用。
 
-On a client, startup callbacks from packages will be called first, followed by <body> templates from your .html files, followed by your application code.
+在客户端，在packages中的`startup`回调函数会最先执行，然后是你的`.html`文件中的`<body>`模板内的`startup`回调函数，接着才是你的应用代码中的。
 
 ```
-// On server startup, if the database is empty,
-// create some initial data.
+// 当服务端开始的时候，如果数据库是空的，
+// 就创建一些初始化数据
 if (Meteor.isServer) {
   Meteor.startup(function () {
     if (Rooms.find().count() === 0) {
@@ -735,14 +735,14 @@ Meteor.wrapAsync(func, [context]) | Anywhere
 
 [Meteor.wrapAsync]: https://github.com/meteor/meteor/blob/master/packages/meteor/helpers.js#L90
 
-> * Wrap a function that takes a callback function as its final parameter. On the server, the wrapped function can be used either synchronously (without passing a callback) or asynchronously (when a callback is passed). On the client, a callback is always required; errors will be logged if there is no callback. If a callback is provided, the environment captured when the original function was called will be restored in the callback.
+> * 包裹一个函数，它接受一个回调函数作为它的最好的参数。在服务端，`wrapped function`可以被同步（不用传递回调函数）或者异步（传递了一个回调函数）地使用。在服务端，一个回调函数总是需要的；如果没有回调函数会输出错误。如果提供了一个回调函数，当原始的函数被调用的时候，被捕获的环境会在回调函数中被恢复。
 
 >	* #### Arguments
 >		* **func** Function  
-		A function that takes a callback as its final parameter
+		接受一个回调函数作为它最后一个参数的函数。
 
 >		* **context Object**  
-		Optional this object against which the original function will be invoked
+		原始函数被调用时的可选的`this`对象。
 
 ---
 
@@ -752,22 +752,21 @@ Meteor.absoluteUrl([path], [options]) | Anywhere
 
 [Meteor.absoluteUrl]: https://github.com/meteor/meteor/blob/master/packages/meteor/url_common.js#L10
 
-> * Generate an absolute URL pointing to the application. The server reads from the ROOT_URL environment variable to determine where it is running. This is taken care of automatically for apps deployed with meteor deploy, but must be provided when using meteor build.
+> * 生成一个指向应用的绝对URL。服务端读取`ROOT_URL`环境变量来确定它运行在哪里。这个会为用`meteor deploy`部署的应用自动生成，但如果是用`meteor build`部署的，就必须提供出来。
 
 >	* #### Arguments  
->		* path String  
-		A path to append to the root URL. Do not include a leading "/".
+>		* **path** String  
+		加到根目录的路径。开头不要包含以"/"。
 
->		* Options  
-		secure Boolean  
-		Create an HTTPS URL.
+>	* #### Options  
+>		* **secure** Boolean  
+		创建一个HTTPS URL
 
->		* replaceLocalhost Boolean  
-		Replace localhost with 127.0.0.1. Useful for services that don't recognize 
-		localhost as a domain name.
+>		* **replaceLocalhost** Boolean  
+		用 127.0.0.1 代替localhost。对不能识别localhost作为域名的服务有用。
 
->		* rootUrl String  
-		Override the default ROOT_URL from the server environment. For example: "http://foo.example.com"
+>		* **rootUrl** String  
+		重写服务端环境下的默认的`ROOT_URL`。比如`"http://foo.example.com"`
 
 ---
 
@@ -777,7 +776,7 @@ Meteor.settings | Anywhere
 
 [Meteor.settings]: https://github.com/meteor/meteor/blob/master/packages/meteor/client_environment.js#L32
 
-> * Meteor.settings contains deployment-specific configuration options. You can initialize settings by passing the --settings option (which takes the name of a file containing JSON data) to meteor run or meteor deploy. When running your server directly (e.g. from a bundle), you instead specify settings by putting the JSON directly into the METEOR_SETTINGS environment variable. If you don't provide any settings, Meteor.settings will be an empty object. If the settings object contains a key named public, then Meteor.settings.public will be available on the client as well as the server. All other properties of Meteor.settings are only defined on the server.
+> * `Meteor.settings`包含特定于部署的配置选项。你可以通过传递`--settings`选项（接受一个带有JSON数据的文件的文件名）给`meteor run`或者`meteor deploy`来初始化设置。当直接运行你的服务器的时候（比如：从一个包中），你能通过把JSON数据直接赋值给`METEOR_SETTINGS`环境变量，从而指定settings。如果你没有提供任何settings，Meteor.settings会是一个空对象。如果settings对象包含一个键名为`public`的话，那么`Meteor.settings.public`可以在客户端或者服务端被访问到。所有的`Meteor.settings`的属性只能在服务端定义。
 
 ---
 
@@ -787,6 +786,9 @@ Meteor.release | Anywhere
 
 [Meteor.release]: https://github.com/meteor/meteor/blob/master/packages/meteor/helpers.js#L11
 
-> * Meteor.release is a string containing the name of the release with which the project was built (for example, "1.2.3"). It is undefined if the project was built using a git checkout of Meteor.
+> * `Meteor.release`是一包含项目发行号的名字的字符串（比如："1.2.3"）。如果项目是用Meteor的在git上的一个分支构建的，那么它就是`undefined`的。
+
+[release]: http://docs.meteor.com/#meteorupdate
+
 
 ---
