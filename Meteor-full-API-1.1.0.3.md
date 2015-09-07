@@ -609,21 +609,21 @@ Meteor是一个完整的应用服务。我们包含了所有你把应用部署�
 
 `meteor deploy www.myapp.com`
 
-We provide this as a free service so you can try Meteor. It is also helpful for quickly putting up internal betas, demos, and so on. For more information, see meteor deploy.
 
 我们把这个作为免费服务提供出去，所以你可以尝试一下Meteor。快速构建内部的beta，demo等等是很有用处的。更多信息请访问[meteor deploy][]
 
 [meteor deploy]: http://docs.meteor.com/#meteordeploy
 
-### Running on your own infrastructure
+### 在你自己的基础设施运行
 
-You can also run your application on your own infrastructure or any hosting provider that can run Node.js apps.
+你也可以在你自己的基础设施或者任何的可以运行Node.js应用的服务器提供商上运行你的应用。
 
-To get started, run
+开始的时候，直接运行：
 
 `meteor build my_directory`
 
-This command will generate a fully-contained Node.js application in the form of a tarball. To run this application, you need to provide Node.js 0.10 and a MongoDB server. (The current release of Meteor has been tested with Node 0.10.36.) You can then run the application by invoking node, specifying the HTTP port for the application to listen on, and the MongoDB endpoint.
+这个命令会以压缩文件的形式产生一个完全包含Node.js的应用。为了运行这个应用，你需要提供Node.js0.10和一个MongoDB服务器。（Meteor目前的发行版本已经用Node 0.10.36测试过了）你就可以通过调用Node，为要监听的应用和MongoDB终端来指定HTTP端口，然后运行应用了。
+
 
 ```
 cd my_directory
@@ -631,13 +631,15 @@ cd my_directory
 env PORT=3000 MONGO_URL=mongodb://localhost:27017/myapp node main.js
 ```
 
-Some packages might require other environment variables. For example, the email package requires a MAIL_URL environment variable.
+一些package可能需要其他的环境变量。比如，`email` package需要一个`MAIL_URL`的环境变量。
 
 ## 写packages
 
 Writing Meteor packages is easy. To initialize a meteor package, run meteor create --package username:packagename, where username is your Meteor Developer username. This will create a package from scratch and prefill the directory with a package.js control file and some javascript. By default, Meteor will take the package name from the name of the directory that contains the package.js file. Don't forget to run meteor add [packagename], even if the package is internal to the app, in order to use it.
 
 Meteor promises repeatable builds for both packages and applications. This means that, if you built your package on a machine, then checked the code into a repository and checked it out elsewhere, you should get the same result. In your package directory, you will find an automatically generated .versions file. This file specifies the versions of all packages used to build your package and is part of the source. Check it into version control to ensure repeatable builds across machines.
+
+
 
 > Sometimes, packages do not just stand on their own, but function in the context of an app (specifically, packages in the packages directory of an app). In that case, the app's context will take precedence. Rather than using the .versions file as a guide, we will build the package with the same dependencies as used by the app (we think that, in practice, it would be confusing to find your local packages built with different versions of things).
 
