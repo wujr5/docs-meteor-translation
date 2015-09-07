@@ -635,15 +635,15 @@ env PORT=3000 MONGO_URL=mongodb://localhost:27017/myapp node main.js
 
 ## 写packages
 
-Writing Meteor packages is easy. To initialize a meteor package, run meteor create --package username:packagename, where username is your Meteor Developer username. This will create a package from scratch and prefill the directory with a package.js control file and some javascript. By default, Meteor will take the package name from the name of the directory that contains the package.js file. Don't forget to run meteor add [packagename], even if the package is internal to the app, in order to use it.
+写Meteor package是很容易的。为了初始化一个meteor package，运行`meteor create --package username:packagename`，`susername`是你的Meteor开发者用户名。这将创建一个新的package，并且会把一个控制文件package.js和一些javascript文件预先填充到目录下。默认地，Meteor会把包含package.js文件的目录的名字作为package的名字。为了使用它，不要忘记运行`meteor add [packagename]`，即使这个package是应用内部的package。
 
-Meteor promises repeatable builds for both packages and applications. This means that, if you built your package on a machine, then checked the code into a repository and checked it out elsewhere, you should get the same result. In your package directory, you will find an automatically generated .versions file. This file specifies the versions of all packages used to build your package and is part of the source. Check it into version control to ensure repeatable builds across machines.
+Meteor确保对package和应用的重复构建。这意味着，如果你在一个机器上面构建了你的package，那么在一个仓库里面检查代码和在其他地方检查代码，你应该得到一样的结果。在你的package目录下，你会找到一个自动创建的`.versions`文件。这个文件指定了你用来构建你的package的所有package的版本，这个文件也是源代码的一部分。把它记录在版本控制中来确保在不同机器上面的重复性的构建。
 
+> 有时候，package不仅仅代表他们自己，也代表在应用程序层次上的上下文的函数（特别地，是应用程序的packages目录下的packages）。在那种情况下，会优先考虑应用程序的上下文。不是使用`.versions`文件作为指导，我们用被应用使用的相同的依赖构建package。（我们想，在实践中，如果你的本地的package使用不同版本的东西构建成的，是非常让人疑惑的）。
 
+Meteor为它的package使用拓展的server版本控制：这意味着版本号有三个部分组成，由句号分割：主版本号，次要版本号和补丁版本号（比如：1.2.3），并带有可选的预发布版本。你可以在[semver.org][]上了解更多。此外，因为一些meteor的package包含外部的库，Meteor支持使用_来表示wrap number的约定。
 
-> Sometimes, packages do not just stand on their own, but function in the context of an app (specifically, packages in the packages directory of an app). In that case, the app's context will take precedence. Rather than using the .versions file as a guide, we will build the package with the same dependencies as used by the app (we think that, in practice, it would be confusing to find your local packages built with different versions of things).
-
-Meteor uses extended semver versioning for its packages: that means that the version number has three parts separated by dots: major version, minor version and patch version (for example: 1.2.3) with an optional pre-release version. You can read more about it on semver.org. Additionally, because some meteor packages wrap external libraries, Meteor supports the convention of using _ to denote a wrap number.
+[semver.org]: http://www.semver.org/
 
 You can read more about package.js files in the API section.
 
