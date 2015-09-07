@@ -645,18 +645,6 @@ Meteor为它的package使用拓展的server版本控制：这意味着版本号�
 
 [semver.org]: http://www.semver.org/
 
-You can read more about package.js files in the API section.
-
-A word on testing: since testing is an important part of the development process, there are two common ways to test a package:
-
-* Integration tests (putting a package directly into an application, and writing tests against the application) is the most common way to test a package. After creating your package, add it to your app's /packages directory and run meteor
-add. This will add your package to your app as a local package. You can then test and run your app as usual. Meteor will detect and respond to changes to your local package, just as it does to your app files.
-
-* Unit tests are run with the command meteor test-packages
-package-name. As described in the package.js section, you can use the package.js file to specify where your unit tests are located. If you have a repository that contains only the package source, you can test your package by specifying the path to the package directory (which must contain a slash), such as meteor test-packages ./.
-
-To publish a package, run meteor publish from the package directory. There are some extra restrictions on published packages: they must contain a version (Meteor packages are versioned using strict semver versioning) and their names must be prefixed with the username of the author and a colon, like so: iron:router. This namespacing allows for more descriptive and on-topic package names.
-
 你可以在API部分阅读到有关[package.js][]文件的相关信息。
 
 [package.js]: http://docs.meteor.com/#packagejs
@@ -669,5 +657,136 @@ To publish a package, run meteor publish from the package directory. There are s
 
 在package目录下运行`meteor publish`可以发布一个package。发布package有一些额外的限制：它们必须包含一个版本（Meteor的package是使用严格的[semver][semver.org]来进行版本控制的）、它们的名字必须以用户名和一个冒号为前缀，就像：`iron:router`一样。这个命名空间允许更具描述性的和相互连接的package名。
 
+# The Meteor API
+
+Your JavaScript code can run in two environments: the client (browser), and the server (a Node.js container on a server). For each function in this API reference, we'll indicate if the function is available just on the client, just on the server, or Anywhere.
+
+## Meteor Core
+
+ Meteor.isClient | Anywhere
+-----------------| --------
+[meteor/client_environment.js, line 13][Meteor.isClient] |
+
+[Meteor.isClient]: https://github.com/meteor/meteor/blob/master/packages/meteor/client_environment.js#L13
+
+Boolean variable. True if running in client environment.
+
+---
 
 
+Meteor.isServer | Anywhere
+--------------- | --------
+[meteor/client_environment.js, line 21][Meteor.isServer] |
+
+[Meteor.isServer]: https://github.com/meteor/meteor/blob/master/packages/meteor/client_environment.js#L21
+
+Boolean variable. True if running in server environment.
+
+---
+
+> Meteor.isServer can be used to limit where code runs, but it does not prevent code from being sent to the client. Any sensitive code that you don't want served to the client, such as code containing passwords or authentication mechanisms, should be kept in the server directory.
+
+Meteor.isCordova | Anywhere
+---------------- | --------
+[meteor/cordova_environment.js, line 7][Meteor.isCordova] |
+
+[Meteor.isCordova]: https://github.com/meteor/meteor/blob/master/packages/meteor/cordova_environment.js#L7
+
+Boolean variable. True if running in a Cordova mobile environment.
+
+---
+
+Meteor.startup(func) | Anywhere
+-------------------- | --------
+[meteor/startup_client.js, line 57][Meteor.startup(func)] |
+
+[Meteor.startup(func)]: https://github.com/meteor/meteor/blob/master/packages/meteor/startup_client.js#L57
+
+* Run code when a client or a server starts.
+
+	* #### Arguments
+
+		* **func** Function  
+		A function to run on startup.
+
+---
+
+On a server, the function will run as soon as the server process is finished starting. On a client, the function will run as soon as the DOM is ready.
+
+The startup callbacks are called in the same order as the calls to Meteor.startup were made.
+
+On a client, startup callbacks from packages will be called first, followed by <body> templates from your .html files, followed by your application code.
+
+```
+// On server startup, if the database is empty,
+// create some initial data.
+if (Meteor.isServer) {
+  Meteor.startup(function () {
+    if (Rooms.find().count() === 0) {
+      Rooms.insert({name: "Initial room"});
+    }
+  });
+}
+```
+
+Meteor.wrapAsync(func, [context]) | Anywhere
+--------------------------------- | --------
+[meteor/helpers.js, line 90][Meteor.wrapAsync] |
+
+[Meteor.wrapAsync]: https://github.com/meteor/meteor/blob/master/packages/meteor/helpers.js#L90
+
+* Wrap a function that takes a callback function as its final parameter. On the server, the wrapped function can be used either synchronously (without passing a callback) or asynchronously (when a callback is passed). On the client, a callback is always required; errors will be logged if there is no callback. If a callback is provided, the environment captured when the original function was called will be restored in the callback.
+
+	* #### Arguments
+		* **func** Function  
+		A function that takes a callback as its final parameter
+
+		* **context Object**  
+		Optional this object against which the original function will be invoked
+
+---
+
+Meteor.absoluteUrl([path], [options]) | Anywhere
+------------------------------------- | --------
+[meteor/url_common.js, line 10][Meteor.absoluteUrl] |
+
+[Meteor.absoluteUrl]: https://github.com/meteor/meteor/blob/master/packages/meteor/url_common.js#L10
+
+* Generate an absolute URL pointing to the application. The server reads from the ROOT_URL environment variable to determine where it is running. This is taken care of automatically for apps deployed with meteor deploy, but must be provided when using meteor build.
+
+	* #### Arguments  
+		* path String  
+		A path to append to the root URL. Do not include a leading "/".
+
+		* Options  
+		secure Boolean  
+		Create an HTTPS URL.
+
+		* replaceLocalhost Boolean  
+		Replace localhost with 127.0.0.1. Useful for services that don't recognize 
+		localhost as a domain name.
+
+		* rootUrl String  
+		Override the default ROOT_URL from the server environment. For example: "http://foo.example.com"
+
+---
+
+Meteor.settings | Anywhere
+--------------- | --------
+[meteor/client_environment.js, line 32][Meteor.settings] |
+
+[Meteor.settings]: https://github.com/meteor/meteor/blob/master/packages/meteor/client_environment.js#L32
+
+* Meteor.settings contains deployment-specific configuration options. You can initialize settings by passing the --settings option (which takes the name of a file containing JSON data) to meteor run or meteor deploy. When running your server directly (e.g. from a bundle), you instead specify settings by putting the JSON directly into the METEOR_SETTINGS environment variable. If you don't provide any settings, Meteor.settings will be an empty object. If the settings object contains a key named public, then Meteor.settings.public will be available on the client as well as the server. All other properties of Meteor.settings are only defined on the server.
+
+---
+
+Meteor.release | Anywhere
+-------------- | --------
+[meteor/helpers.js, line 11][Meteor.release] |
+
+[Meteor.release]: https://github.com/meteor/meteor/blob/master/packages/meteor/helpers.js#L11
+
+* Meteor.release is a string containing the name of the release with which the project was built (for example, "1.2.3"). It is undefined if the project was built using a git checkout of Meteor.
+
+---
