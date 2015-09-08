@@ -813,28 +813,29 @@ Meteor.publish(name, func) | Server
 
 ---
 
-To publish records to clients, call Meteor.publish on the server with two parameters: the name of the record set, and a publish function that Meteor will call each time a client subscribes to the name.
+为了发布记录给客户端，在服务端调用`Meteor.publish`，并接受两个参数：记录集合的名字，和一个每次客户端向这个名字发起订阅的时候执行的`publish`函数。
 
-Publish functions can return a Collection.Cursor, in which case Meteor will publish that cursor's documents to each subscribed client. You can also return an array of Collection.Cursors, in which case Meteor will publish all of the cursors.
+发布函数可以返回一个[Collection.Cursor][]，在这种情况下，Meteor会发布cursor的文档给每一个订阅的客户端。你也可以返回一个`Collection.Cursors`的数组，在这种情况下，Meteor会发布全部cursor。
 
-
+[Collection.Cursor]: http://docs.meteor.com/#mongo_cursor
 
 > If you return multiple cursors in an array, they currently must all be from different collections. We hope to lift this restriction in a future release.
+> 如果你在一个数组中返回多个cursor的话，他们目前必须全部来自不同的collection。我们希望在未来的版本取消这个限制。
 
 ```
-// server: publish the rooms collection, minus secret info.
+// 服务端：发布rooms集合，过滤掉secreInfo。
 Meteor.publish("rooms", function () {
   return Rooms.find({}, {fields: {secretInfo: 0}});
 });
 
-// ... and publish secret info for rooms where the logged-in user
-// is an admin. If the client subscribes to both streams, the records
-// are merged together into the same documents in the Rooms collection.
+// ...和给管理员用户发布rooms的secretInfo。
+// 如果客户端订阅两个数据流，
+// 记录会合并到Rooms collection的相同的文档中去。
 Meteor.publish("adminSecretInfo", function () {
   return Rooms.find({admin: this.userId}, {fields: {secretInfo: 1}});
 });
 
-// publish dependent documents and simulate joins
+// 发布相关文档和模拟连接。
 Meteor.publish("roomAndMessages", function (roomId) {
   check(roomId, String);
   return [
@@ -844,11 +845,11 @@ Meteor.publish("roomAndMessages", function (roomId) {
 });
 ```
 
-Alternatively, a publish function can directly control its published record set by calling the functions added (to add a new document to the published record set), changed (to change or clear some fields on a document already in the published record set), and removed (to remove documents from the published record set). These methods are provided by this in your publish function.
+可选地，一个`publish`函数可以通过调用添加函数（把新的文档添加到发布的记录集合中）、更新函数（改变或者清除已经在发布了的记录集合中的文档的一些域）、和删除函数（从发布的记录集合中删除文档）直接控制它的发布的记录集合。这些方法在会在你的`publish`函数中提供。
 
-If a publish function does not return a cursor or array of cursors, it is assumed to be using the low-level added/changed/removed interface, and it must also call ready once the initial record set is complete.
+如果一个`publish`函数没有返回一个`cursor`或者`cursor`的数组，那就使用底层接口`added/changed/removed`，并且一旦初始的记录集合准备好了，就必须调用`ready`函数。
 
-Example:
+例子：
 
 ```
 // server: publish the current size of a collection
