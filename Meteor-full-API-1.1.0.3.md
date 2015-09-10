@@ -1048,4 +1048,6 @@ Tracker.autorun(function () {
 This subscribes you to the chat messages in the current room and to your private messages. When you change rooms by calling Session.set("current-room",
 "new-room"), Meteor will subscribe to the new room's chat messages, unsubscribe from the original room's chat messages, and continue to stay subscribed to your private messages.
 
-If more than one subscription sends conflicting values for a field (same collection name, document ID, and field name), then the value on the client will be one of the published values, chosen arbitrarily.
+If more than one subscription sends conflicting values for a field (same collection name, document ID, and field name), then the value on the client will be one of the published values, chosen arbitrarily.\
+
+lsls
